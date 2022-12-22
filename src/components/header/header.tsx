@@ -1,4 +1,20 @@
+import { useState, useEffect } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { setClickedButton } from '../../store/actions';
+
 function HeaderComponent() {
+  const dispatch = useAppDispatch();
+  const [ isClicked, setClicked ] = useState(false);
+
+  const handleNewPointButton = () => {
+  setClicked(!isClicked);
+  dispatch(setClickedButton(true));
+ }
+
+// useEffect(() => {
+//   dispatch(setClickedButton(true));
+// }, [dispatch]);
+
   return(
     <header className="page-header">
   <div className="page-body__container  page-header__container">
@@ -33,7 +49,7 @@ function HeaderComponent() {
           </form>
         </div>
       </div>
-      <button className="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>
+      <button className="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button" disabled={isClicked} onClick={handleNewPointButton}>New event</button>
     </div>
   </div>
 </header>

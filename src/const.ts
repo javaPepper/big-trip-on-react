@@ -6,7 +6,7 @@ export enum SortingValues {
   offers = 'Offers'
 }
 
-export const destinations = ['Amsterdam', 'Chamonix',' Geneva', 'Bruxells'];
+export const destinations = ['Amsterdam', 'Chamonix',' Geneva', 'Bruxells', 'Dusseldorf'];
 
 export const pointType = ["taxi", "bus", "train", "ship", "drive", "flight", "check-in", "sightseeing", "restaurant"];
 
