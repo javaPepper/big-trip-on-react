@@ -2,7 +2,7 @@ import AddNewPointComponent from "../../components/add-new-point/add-new-point-c
 import HeaderComponent from "../../components/header/header";
 import PointComponent from "../../components/point-component/point-component";
 import SortComponent from "../../components/sort-component/sort-component";
-import { SortingValues } from "../../const";
+import { pointType, SortingValues } from "../../const";
 import { useAppSelector } from "../../hooks";
 import { point } from "../../mock/point";
 
@@ -21,7 +21,7 @@ function MainPage() {
       </form>
       <ul className="trip-events__list">
         {isClicked && <AddNewPointComponent/>}
-       <PointComponent point={point}/>
+         <PointComponent point={point}/>
       </ul>
     </section>
   </div>
