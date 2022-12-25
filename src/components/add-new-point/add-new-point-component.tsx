@@ -1,17 +1,17 @@
 import { pointType } from "../../const";
 import EventTypeComponent from "../event-type/event-type-component";
 import { useState } from 'react';
-import Datepicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 function AddNewPointComponent() {
   const [ type, setType ] = useState<string>('Flight');
   const [ isOpened, setOpened ] = useState<boolean>(false);
-  const [ date, setDate ] = useState<Date>(new Date());
+  const [ startDate, setStartDate ] = useState<Date>(new Date());
+  const [ endDate, setEndDate ] = useState<Date>(new Date());
 
   const handleIsOpened = () => {
     setOpened(!isOpened);
-
   }
 
   return(
@@ -60,16 +60,30 @@ function AddNewPointComponent() {
       </div>
       <div className="event__field-group  event__field-group--time" >
         <label className="visually-hidden" htmlFor="event-start-time-1">From</label>
-        <Datepicker
-        selected={date}
-        onChange={(date: Date) => setDate(date)}>
-        </Datepicker>
+        <DatePicker
+          selected={startDate}
+          dateFormat='dd/MM/yy H:mm'
+          onChange={(date: Date) => setStartDate(date)}
+          selectsStart
+          showTimeInput
+          startDate={startDate}
+          endDate={endDate}
+          minDate={new Date()}
+        >
+        </DatePicker>
         —
         <label className="visually-hidden" htmlFor="event-end-time-1">To</label>
-        <Datepicker
-        selected={date}
-        onChange={(date: Date) => setDate(date)}>
-        </Datepicker>
+        <DatePicker
+          selected={endDate}
+          dateFormat='dd/MM/yy H:mm'
+          onChange={(date: Date) => setEndDate(date)}
+          selectsEnd
+          showTimeInput
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+        >
+        </DatePicker>
       </div>
       <div className="event__field-group  event__field-group--price">
         <label className="event__label" htmlFor="event-price-1">
