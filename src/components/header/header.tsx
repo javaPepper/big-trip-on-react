@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setClickedButton } from '../../store/actions';
 
 function HeaderComponent() {
   const dispatch = useAppDispatch();
   const [ isClicked, setClicked ] = useState(false);
+  const totalPrice = useAppSelector((state) => state.totalPrice);
 
   const handleNewPointButton = () => {
   setClicked(!isClicked);
   dispatch(setClickedButton(true));
  }
-
-// useEffect(() => {
-//   dispatch(setClickedButton(true));
-// }, [dispatch]);
 
   return(
     <header className="page-header">
@@ -26,7 +23,7 @@ function HeaderComponent() {
           <p className="trip-info__dates">Mar 18&nbsp;—&nbsp;20</p>
         </div>
         <p className="trip-info__cost">
-          Total: €&nbsp;<span className="trip-info__cost-value">1230</span>
+          Total: €&nbsp;<span className="trip-info__cost-value">{totalPrice}</span>
         </p>
       </section>
       <div className="trip-main__trip-controls  trip-controls">

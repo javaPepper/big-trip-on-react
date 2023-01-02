@@ -1,24 +1,26 @@
-import { SortingValues } from "../../const";
-
 type SortComponentProps = {
-  sortValue: string[];
-}
+  sortValue: string;
+  isDisabled: boolean;
+  isDay: boolean;
+};
 
-function SortComponent({sortValue}: SortComponentProps) {
-  return(
-    <>
- {sortValue.map((value) =>
- <div className={`trip-sort__item  trip-sort__item--${value.toLowerCase()}`} key={value}>
-  {(value === SortingValues.event || value === SortingValues.offers)
-   ?
-  <input id={`sort-${value.toLowerCase()}`} className="trip-sort__input  visually-hidden" type="radio" name="trip-sort" defaultValue={`sort-${value.toLowerCase()}`} disabled />
-   :
-  (value === SortingValues.day) && <input id={`sort-${value.toLowerCase()}`} className="trip-sort__input  visually-hidden" type="radio" name="trip-sort" defaultValue={`sort-${value.toLowerCase()}`} checked />
-  }
-  <label className="trip-sort__btn" htmlFor={`sort-${value.toLowerCase()}`}>{value}</label></div>
- )}
-  </>
-  )
+function SortComponent({ sortValue, isDisabled, isDay }: SortComponentProps) {
+  return (
+    <div className={`trip-sort__item  trip-sort__item--${sortValue}`}>
+      <input
+        id={`sort-${sortValue}`}
+        className="trip-sort__input  visually-hidden"
+        type="radio"
+        name="trip-sort"
+        defaultValue={`sort-${sortValue}`}
+        disabled={isDisabled}
+        defaultChecked={isDay}
+      />
+      <label className="trip-sort__btn" htmlFor={`sort-${sortValue}`}>
+        {sortValue}
+      </label>
+    </div>
+  );
 }
 
 export default SortComponent;

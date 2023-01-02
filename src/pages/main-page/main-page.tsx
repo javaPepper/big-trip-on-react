@@ -1,33 +1,38 @@
 import AddNewPointComponent from "../../components/add-new-point/add-new-point-component";
 import HeaderComponent from "../../components/header/header";
 import PointComponent from "../../components/point-component/point-component";
-import SortComponent from "../../components/sort-component/sort-component";
-import { pointType, SortingValues } from "../../const";
+import SortListComponent from "../../components/sort-list-component/sort-list-component";
 import { useAppSelector } from "../../hooks";
-import { point } from "../../mock/point";
+import { points } from "../../mock/points";
 
 function MainPage() {
   const isClicked = useAppSelector((state) => state.isClicked);
 
-  return(
+  return (
     <>
- <HeaderComponent/>
-    <main className="page-body__page-main  page-main">
-  <div className="page-body__container">
-    <section className="trip-events">
-      <h2 className="visually-hidden">Trip events</h2>
-      <form className="trip-events__trip-sort  trip-sort" action="#" method="get">
-         {<SortComponent sortValue={Object.values(SortingValues)}/>}
-      </form>
-      <ul className="trip-events__list">
-        {isClicked && <AddNewPointComponent/>}
-         <PointComponent point={point}/>
-      </ul>
-    </section>
-  </div>
-</main>
+      <HeaderComponent />
+      <main className="page-body__page-main  page-main">
+        <div className="page-body__container">
+          <section className="trip-events">
+            <h2 className="visually-hidden">Trip events</h2>
+            <form
+              className="trip-events__trip-sort  trip-sort"
+              action="#"
+              method="get"
+            >
+              <SortListComponent />
+            </form>
+            <ul className="trip-events__list">
+              {isClicked && <AddNewPointComponent/> }
+              {points.map((point) => (
+                <PointComponent point={point} key={point.id} />
+              ))}
+            </ul>
+          </section>
+        </div>
+      </main>
     </>
-  )
+  );
 }
 
 export default MainPage;

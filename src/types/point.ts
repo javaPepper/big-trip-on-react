@@ -1,10 +1,10 @@
 export type Point = {
-  base_price: number,
-  date_from: string,
-  date_to: string,
+  basePrice: number,
+  dateFrom: string,
+  dateTo: string,
   destination: string,
-  id: string,
-  is_favorite: boolean,
-  offers: string[],
+  id?: string,
+  isFavorite: boolean,
+  offers: number[],
   type: string
 }
