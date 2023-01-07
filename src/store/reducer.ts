@@ -1,26 +1,26 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { setClickedButton, setCheckedOffer, setTotalPrice, addCheckedOffer, addId } from './actions';
+import { setClickedButton, setCheckedOffer, setTotalPrice, setClickedEdit, setType } from './actions';
 
 type initialStateType = {
-  isClicked: boolean,
+  isClickedHeader: boolean,
   isChecked: boolean,
   totalPrice: number,
-  id: number,
-  ids: number[],
+  isClickedEdit: boolean,
+  type: string,
 }
 
 const initialState: initialStateType = {
-  isClicked: false,
+  isClickedHeader: false,
   isChecked: false,
   totalPrice: 0,
-  id: 0,
-  ids: []
+  isClickedEdit: false,
+  type: 'flight',
 }
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
   .addCase(setClickedButton, (state, action: PayloadAction<boolean>) => {
-    state.isClicked = action.payload;
+    state.isClickedHeader = action.payload;
   })
   .addCase(setCheckedOffer, (state, action: PayloadAction<boolean>) => {
     state.isChecked = action.payload;
@@ -28,10 +28,10 @@ export const reducer = createReducer(initialState, (builder) => {
   .addCase(setTotalPrice, (state, action: PayloadAction<number>) => {
     state.totalPrice = action.payload;
   })
-  .addCase(addCheckedOffer, (state, action: PayloadAction<number>) => {
-    state.id = action.payload;
+  .addCase(setClickedEdit, (state, action: PayloadAction<boolean>) => {
+    state.isClickedEdit = action.payload;
   })
-  .addCase(addId, (state, action: PayloadAction<number[]>) =>{
-    state.ids = action.payload;
+  .addCase(setType, (state, action: PayloadAction<string>) => {
+    state.type = action.payload;
   })
 });

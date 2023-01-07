@@ -4,8 +4,9 @@ import { setClickedButton } from '../../store/actions';
 
 function HeaderComponent() {
   const dispatch = useAppDispatch();
-  const [ isClicked, setClicked ] = useState(false);
+  const [isClicked, setClicked] = useState<boolean>(false);
   const totalPrice = useAppSelector((state) => state.totalPrice);
+  const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
 
   const handleNewPointButton = () => {
   setClicked(!isClicked);

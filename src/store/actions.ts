@@ -9,8 +9,8 @@ export const setCheckedOffer = createAction('checkedOffer',
 export const setTotalPrice = createAction('setTotalPrice',
 (price: number) => ({payload: price}))
 
-export const addCheckedOffer = createAction('addCheckedOffer',
-(id: number) => ({payload: id}))
+export const setClickedEdit = createAction('setClickedEdit',
+(isClicked: boolean) => ({payload: isClicked}))
 
-export const addId = createAction('addId',
-(ids: number[]) => ({payload: ids}))
+export const setType = createAction('setType',
+(type: string) => ({payload: type}))

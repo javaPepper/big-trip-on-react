@@ -1,12 +1,11 @@
-import AddNewPointComponent from "../../components/add-new-point/add-new-point-component";
 import HeaderComponent from "../../components/header/header";
-import PointComponent from "../../components/point-component/point-component";
+import PointComponent from "../../components/point/point-component";
+import RoutePointsList from "../../components/route-points-list/route-points-list-component";
 import SortListComponent from "../../components/sort-list-component/sort-list-component";
 import { useAppSelector } from "../../hooks";
-import { points } from "../../mock/points";
 
 function MainPage() {
-  const isClicked = useAppSelector((state) => state.isClicked);
+  const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
 
   return (
     <>
@@ -23,10 +22,8 @@ function MainPage() {
               <SortListComponent />
             </form>
             <ul className="trip-events__list">
-              {isClicked && <AddNewPointComponent/> }
-              {points.map((point) => (
-                <PointComponent point={point} key={point.id} />
-              ))}
+              {isClickedHeader && <PointComponent />}
+              {<RoutePointsList />}
             </ul>
           </section>
         </div>
