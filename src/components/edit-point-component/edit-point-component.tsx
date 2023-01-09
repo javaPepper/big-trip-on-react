@@ -1,48 +1,46 @@
-import { destinations, pointTypes } from "../../const";
-import EventTypeComponent from "../event-type/event-type-component";
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import OfferComponent from "../offer/offer-component";
-import { offersByType } from "../../mock/offers-by-type";
-import { Point } from "../../types/point";
-import dayjs from "dayjs";
+import { destinations, pointTypes } from "../../const";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { setType } from "../../store/actions";
+import { pointOffers } from "../../mock/point-offers";
+import { setClickedEdit, setCloseEvent, setType } from "../../store/actions";
+import { Point } from "../../types/point";
+import EventTypeComponent from "../event-type/event-type-component";
+import OfferComponent from "../offer/offer-component";
+import RoutePointComponent from "../route-point-component/route-point-component";
 
-function PointComponent() {
+type EditPointComponentProps = {
+  point: Point;
+};
+
+function EditPointComponent({ point }: EditPointComponentProps) {
+  const { basePrice, dateFrom, dateTo, destination, id, isFavorite, offers, type } = point;
   const [ startDate, setStartDate ] = useState<Date>(new Date());
   const [ endDate, setEndDate ] = useState<Date>(new Date());
-  const [ priceValue, setPrice ] = useState<string>("");
-  const [ destinationValue, setDestination ] = useState<string>("");
-  const [ ids, setIds ] = useState<number[]>([]);
-  const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
-  const [...rest] = offersByType;
-  const type = useAppSelector((state) => state.type);
+  const [ isClosed, setClosed ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
 
-  const handleOnSubmit = (evt: FormEvent) => {
-    evt.preventDefault();
-    const point: Point = {
-      basePrice: +priceValue,
-      dateFrom: dayjs(startDate).format("MMM D"),
-      dateTo: dayjs(endDate).format("MMM D"),
-      destination: destinationValue,
-      isFavorite: false,
-      offers: Array.from(new Set(ids)),
-      type: type,
-    };
-    return point;
+  const getOffers = pointOffers.filter(
+    (offer) => offer.id === offers.find((el) => el === offer.id)
+  );
+
+  const handleCloseEvent = () => {
+    setClosed(!isClosed)
+    dispatch(setClickedEdit(true))
   };
+  console.log(isClosed);
 
   return (
-    <li className="trip-events__item">
+    <>
+    {isClosed ?
+    <RoutePointComponent point={point}/> :
+      (<li className="trip-events__item">
       <form
-        className="event event--edit"
-        action="#"
-        method="post"
-        onSubmit={handleOnSubmit}
-      >
+      className="event event--edit"
+      action="#"
+      method="post">
         <header className="event__header">
           <div className="event__type-wrapper">
             <label
@@ -63,7 +61,7 @@ function PointComponent() {
               id="event-type-toggle-1"
               type="checkbox"
             />
-            <div className="event__type-list">
+           <div className="event__type-list">
               <fieldset className="event__type-group">
                 <legend className="visually-hidden">Event type</legend>
                 {pointTypes.map((type) => (
@@ -90,12 +88,8 @@ function PointComponent() {
               id="event-destination-1"
               type="text"
               name="event-destination"
-              placeholder="Enter your destination"
+              defaultValue={destination}
               list="destination-list-1"
-              onChange={(evt) => {
-                evt.preventDefault();
-                setDestination(evt.currentTarget.value);
-              }}
             />
             <datalist id="destination-list-1">
               {destinations.map((point) => (
@@ -108,13 +102,13 @@ function PointComponent() {
               From
             </label>
             <DatePicker
-              selected={startDate}
+              selected={new Date(dateFrom)}
               dateFormat="dd/MM/yy H:mm"
               onChange={(date: Date) => setStartDate(date)}
               selectsStart
               showTimeInput
-              startDate={startDate}
-              endDate={endDate}
+              startDate={new Date(dateFrom)}
+              endDate={new Date(dateTo)}
               minDate={new Date()}
             ></DatePicker>
             —
@@ -122,14 +116,14 @@ function PointComponent() {
               To
             </label>
             <DatePicker
-              selected={endDate}
+              selected={new Date(dateTo)}
               dateFormat="dd/MM/yy H:mm"
               onChange={(date: Date) => setEndDate(date)}
               selectsEnd
               showTimeInput
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate}
+              startDate={new Date(dateFrom)}
+              endDate={new Date(dateTo)}
+              minDate={new Date(dateFrom)}
             ></DatePicker>
           </div>
           <div className="event__field-group  event__field-group--price">
@@ -141,31 +135,18 @@ function PointComponent() {
               id="event-price-1"
               type="text"
               name="event-price"
-              defaultValue=""
-              onChange={(evt) => {
-                evt.preventDefault();
-                setPrice(evt.currentTarget.value);
-              }}
+              defaultValue={basePrice}
             />
           </div>
           <button className="event__save-btn  btn  btn--blue" type="submit">
             Save
           </button>
-          {isClickedEdit ? (
-            <button className="event__reset-btn" type="reset">
-              Delete
-            </button>
-          ) : (
-            <button className="event__reset-btn" type="reset">
-              Cancel
-            </button>
-          )}
-
-          {isClickedEdit && (
-            <button className="event__rollup-btn" type="button">
-              <span className="visually-hidden">Open event</span>
-            </button>
-          )}
+          <button className="event__reset-btn" type="reset">
+            Delete
+          </button>
+          <button className="event__rollup-btn" type="button" onClick={handleCloseEvent}>
+            <span className="visually-hidden">Open event</span>
+          </button>
         </header>
         <section className="event__details">
           <section className="event__section  event__section--offers">
@@ -173,17 +154,11 @@ function PointComponent() {
               Offers
             </h3>
             <div className="event__available-offers">
-              {/* {type && */}
-                {(rest.find((offer) => offer.type === type))?.offers.map((offer) => (
-                  <OfferComponent
-                    offer={offer}
-                    key={offer.id}
-                    onChange={() => {
-                      setIds([...ids, offer.id]);
-                    }}
-                  />
-                ))}
-                {/* } */}
+              {getOffers.map((offer) =>
+              <OfferComponent
+              offer={offer}
+              key={offer.id}
+              />)}
             </div>
           </section>
           <section className="event__section  event__section--destination">
@@ -191,44 +166,17 @@ function PointComponent() {
               Destination
             </h3>
             <p className="event__destination-description">
-              Geneva is a city in Switzerland that lies at the southern tip of
-              expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura
-              mountains, the city has views of dramatic Mont Blanc.
+              Chamonix-Mont-Blanc (usually shortened to Chamonix) is a resort
+              area near the junction of France, Switzerland and Italy. At the
+              base of Mont Blanc, the highest summit in the Alps, it's renowned
+              for its skiing.
             </p>
-            <div className="event__photos-container">
-              <div className="event__photos-tape">
-                <img
-                  className="event__photo"
-                  src="img/photos/1.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/2.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/3.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/4.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/5.jpg"
-                  alt="Event photo"
-                />
-              </div>
-            </div>
           </section>
         </section>
       </form>
-    </li>
+    </li>)}
+    </>
   );
 }
 
-export default PointComponent;
+export default EditPointComponent;

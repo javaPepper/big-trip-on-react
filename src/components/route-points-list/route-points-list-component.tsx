@@ -2,7 +2,6 @@ import { points } from "../../mock/points";
 import RoutePointComponent from "../route-point-component/route-point-component";
 
 function RoutePointsList() {
-
   return (
     <>
       {points.map((point) => (

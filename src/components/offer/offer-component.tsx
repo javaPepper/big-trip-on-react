@@ -1,11 +1,11 @@
 import { Offer } from "../../types/offer";
-import { useState, HTMLAttributes } from "react";
+import { useState } from "react";
 
 type OfferComponentProps = {
   offer: Offer;
-} & HTMLAttributes<HTMLDivElement>
+}
 
-function OfferComponent({ offer, onChange }: OfferComponentProps) {
+function OfferComponent({ offer }: OfferComponentProps) {
   const { id, title, price } = offer;
   const [ isChecked, setChecked ] = useState<boolean>(false);
 
@@ -21,7 +21,7 @@ function OfferComponent({ offer, onChange }: OfferComponentProps) {
         type="checkbox"
         name="event-offer"
         checked={isChecked}
-        onChange={onChange}
+        onChange={handleOnChange}
       />
       <label
         className="event__offer-label"

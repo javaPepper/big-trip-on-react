@@ -3,8 +3,8 @@ import dayjs from "dayjs";
 import { pointOffers } from "../../mock/point-offers";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import PointComponent from "../point/point-component";
 import { setClickedEdit } from "../../store/actions";
+import EditPointComponent from "../edit-point-component/edit-point-component";
 
 type PointComponentProps = {
   point: Point;
@@ -18,8 +18,6 @@ function RoutePointComponent({ point }: PointComponentProps) {
   const [isClicked, setClicked] = useState<boolean>(false);
   const [isFavorite, setFavorite] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
-  const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
 
   const getOffers = pointOffers.filter(
     (offer) => offer.id === offers.find((el) => el === offer.id)
@@ -32,13 +30,12 @@ function RoutePointComponent({ point }: PointComponentProps) {
 
   const handleIsFavorite = () => {
     setFavorite(!isFavorite);
-  }
-  console.log(isClicked);
+  };
 
   return (
     <>
     {isClicked ?
-    (<PointComponent/>) :
+    (<EditPointComponent point={point}/>) :
     (<li className="trip-events__item">
           <div className="event">
             <time className="event__date" dateTime="2019-03-18">
@@ -97,7 +94,6 @@ function RoutePointComponent({ point }: PointComponentProps) {
               className="event__rollup-btn"
               type="button"
               onClick={handleOnClick}
-              disabled={isClickedHeader || isClickedEdit}
             >
               <span className="visually-hidden">Open event</span>
             </button>

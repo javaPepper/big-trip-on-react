@@ -14,3 +14,6 @@ export const setClickedEdit = createAction('setClickedEdit',
 
 export const setType = createAction('setType',
 (type: string) => ({payload: type}))
+
+export const setCloseEvent = createAction('setClosed',
+(isClosed: boolean) => ({payload: isClosed}))

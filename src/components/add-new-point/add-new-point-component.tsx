@@ -7,30 +7,41 @@ import OfferComponent from "../offer/offer-component";
 import { offersByType } from "../../mock/offers-by-type";
 import { Point } from "../../types/point";
 import dayjs from "dayjs";
+import { setType } from "../../store/actions";
+import { useAppDispatch } from "../../hooks";
+import { pointOffers } from "../../mock/point-offers";
 
-function AddNewPointComponent() {
-  const [type, setType] = useState<string>("Flight");
+type AddNewPointComponentProps = {
+  point: Point;
+}
+
+function AddNewPointComponent({point}: AddNewPointComponentProps) {
+  const { basePrice, dateFrom, dateTo, destination, id, isFavorite, offers, type } = point;
+  //const [type, setType] = useState<string>("Flight");
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
+  const dispatch = useAppDispatch();
   const [priceValue, setPrice] = useState<string>("");
   const [destinationValue, setDestination] = useState<string>("");
-  const [ids, setIds] = useState<number[]>([]);
+  //const [ids, setIds] = useState<number[]>([]);
 
-  const offers = offersByType.find((offer) => offer.type === type);
+  const getOffers = pointOffers.filter(
+    (offer) => offer.id === offers.find((el) => el === offer.id)
+  );
 
-  const handleOnSubmit = (evt: FormEvent) => {
-    evt.preventDefault();
-    const point: Point = {
-      basePrice: +priceValue,
-      dateFrom: dayjs(startDate).format("MMM D"),
-      dateTo: dayjs(endDate).format("MMM D"),
-      destination: destinationValue,
-      isFavorite: false,
-      offers: Array.from(new Set(ids)),
-      type: type,
-    };
-    return point;
-  };
+  // const handleOnSubmit = (evt: FormEvent) => {
+  //   evt.preventDefault();
+  //   const point: Point = {
+  //     basePrice: +priceValue,
+  //     dateFrom: dayjs(startDate).format("MMM D"),
+  //     dateTo: dayjs(endDate).format("MMM D"),
+  //     destination: destinationValue,
+  //     isFavorite: false,
+  //     offers: Array.from(new Set(ids)),
+  //     type: type,
+  //   };
+  //   return point;
+  // };
 
   return (
     <li className="trip-events__item">
@@ -38,7 +49,7 @@ function AddNewPointComponent() {
         className="event event--edit"
         action="#"
         method="post"
-        onSubmit={handleOnSubmit}
+        //onSubmit={handleOnSubmit}
       >
         <header className="event__header">
           <div className="event__type-wrapper">
@@ -68,7 +79,7 @@ function AddNewPointComponent() {
                     type={type}
                     key={type}
                     onClick={() => {
-                      setType(type);
+                      dispatch(setType(type));
                     }}
                   />
                 ))}
@@ -145,7 +156,11 @@ function AddNewPointComponent() {
               }}
             />
           </div>
-          <button className="event__save-btn  btn  btn--blue" type="submit">
+          <button
+          className="event__save-btn  btn  btn--blue"
+          type="submit"
+          //onSubmit={handleOnSubmit}
+          >
             Save
           </button>
           <button className="event__reset-btn" type="reset">
@@ -159,13 +174,13 @@ function AddNewPointComponent() {
             </h3>
             <div className="event__available-offers">
               {type &&
-                offers?.offers.map((offer) => (
+                getOffers.map((offer) => (
                   <OfferComponent
                     offer={offer}
                     key={offer.id}
-                    onChange={() => {
-                      setIds([...ids, offer.id]);
-                    }}
+                    // onChange={() => {
+                    //   setIds([...ids, offer.id]);
+                    // }}
                   />
                 ))}
             </div>

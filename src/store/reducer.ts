@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { setClickedButton, setCheckedOffer, setTotalPrice, setClickedEdit, setType } from './actions';
+import { setClickedButton, setCheckedOffer, setTotalPrice, setClickedEdit, setType, setCloseEvent } from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
@@ -7,6 +7,7 @@ type initialStateType = {
   totalPrice: number,
   isClickedEdit: boolean,
   type: string,
+  isClosed: boolean,
 }
 
 const initialState: initialStateType = {
@@ -15,6 +16,7 @@ const initialState: initialStateType = {
   totalPrice: 0,
   isClickedEdit: false,
   type: 'flight',
+  isClosed: false,
 }
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -33,5 +35,8 @@ export const reducer = createReducer(initialState, (builder) => {
   })
   .addCase(setType, (state, action: PayloadAction<string>) => {
     state.type = action.payload;
+  })
+  .addCase(setCloseEvent, (state, action: PayloadAction<boolean>) => {
+    state.isClosed = action.payload;
   })
 });
