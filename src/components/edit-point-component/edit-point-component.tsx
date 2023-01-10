@@ -2,9 +2,9 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { destinations, pointTypes } from "../../const";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 import { pointOffers } from "../../mock/point-offers";
-import { setClickedEdit, setCloseEvent, setType } from "../../store/actions";
+import { setType } from "../../store/actions";
 import { Point } from "../../types/point";
 import EventTypeComponent from "../event-type/event-type-component";
 import OfferComponent from "../offer/offer-component";
@@ -20,7 +20,6 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const [ endDate, setEndDate ] = useState<Date>(new Date());
   const [ isClosed, setClosed ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
 
   const getOffers = pointOffers.filter(
     (offer) => offer.id === offers.find((el) => el === offer.id)
@@ -28,14 +27,12 @@ function EditPointComponent({ point }: EditPointComponentProps) {
 
   const handleCloseEvent = () => {
     setClosed(!isClosed)
-    dispatch(setClickedEdit(true))
   };
-  console.log(isClosed);
 
   return (
     <>
     {isClosed ?
-    <RoutePointComponent point={point}/> :
+    <RoutePointComponent point={point} isActive={id === point.id}/> :
       (<li className="trip-events__item">
       <form
       className="event event--edit"
