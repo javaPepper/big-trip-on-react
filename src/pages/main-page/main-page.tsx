@@ -5,9 +5,9 @@ import SortListComponent from "../../components/sort-list-component/sort-list-co
 import { useAppSelector } from "../../hooks";
 import { points } from "../../mock/points";
 
-
 function MainPage() {
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
+  const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
 
   return (
     <>
@@ -24,7 +24,9 @@ function MainPage() {
               <SortListComponent />
             </form>
             <ul className="trip-events__list">
-              {isClickedHeader && <AddNewPointComponent point={points[0]}/>}
+              {!isClickedEdit && isClickedHeader && (
+                <AddNewPointComponent point={points[0]} />
+              )}
               {<RoutePointsList />}
             </ul>
           </section>
