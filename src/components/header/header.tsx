@@ -1,14 +1,12 @@
-import { useState } from "react";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setClickedButton } from "../../store/actions";
 import FilterList from "../filter-list/filter-list";
 
 function HeaderComponent() {
   const dispatch = useAppDispatch();
-  const [isClicked, setClicked] = useState<boolean>(false);
+  const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
 
   const handleNewPointButton = () => {
-    setClicked(!isClicked);
     dispatch(setClickedButton(true));
   };
 
@@ -48,7 +46,7 @@ function HeaderComponent() {
           <button
             className="trip-main__event-add-btn  btn  btn--big  btn--yellow"
             type="button"
-            disabled={isClicked}
+            disabled={isClickedHeader}
             onClick={handleNewPointButton}
           >
             New event

@@ -1,18 +1,18 @@
-import { SortingValues } from "../../const";
+import { SortRenderValues } from "../../const";
 import SortComponent from "../sort-component/sort-component";
 
 function SortListComponent() {
   return (
     <>
-      {Object.values(SortingValues).map((value) => (
+      {Object.values(SortRenderValues).map((value) => (
         <SortComponent
           key={value}
           sortValue={value.toLowerCase()}
           isDay={
-            value === SortingValues.day
+            value === SortRenderValues.day
           }
           isDisabled={
-            value === SortingValues.event || value === SortingValues.offers
+            value === SortRenderValues.event || value === SortRenderValues.offers
           }
         />
       ))}

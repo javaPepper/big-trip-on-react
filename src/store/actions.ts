@@ -14,3 +14,6 @@ export const setType = createAction('setType',
 
 export const setFilterValue = createAction('setFilterValue',
 (value: string) => ({payload: value}))
+
+export const setSortedPoints = createAction('setSortedPoints',
+(value: string) => ({payload: value}))

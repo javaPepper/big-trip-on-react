@@ -1,5 +1,5 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue } from './actions';
+import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue, setSortedPoints } from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
@@ -7,6 +7,7 @@ type initialStateType = {
   isClickedEdit: boolean,
   type: string,
   filterValue: string,
+  sortValue: string,
 }
 
 const initialState: initialStateType = {
@@ -15,6 +16,7 @@ const initialState: initialStateType = {
   isClickedEdit: false,
   type: 'flight',
   filterValue: '',
+  sortValue: '',
 }
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -31,7 +33,10 @@ export const reducer = createReducer(initialState, (builder) => {
   .addCase(setType, (state, action: PayloadAction<string>) => {
     state.type = action.payload;
   })
-  .addCase(setFilterValue, (state, action: PayloadAction<string>) =>{
+  .addCase(setFilterValue, (state, action: PayloadAction<string>) => {
     state.filterValue = action.payload;
+  })
+  .addCase(setSortedPoints, (state, action: PayloadAction<string>) => {
+    state.sortValue = action.payload;
   })
 });

@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { pointOffers } from "../../mock/point-offers";
 import { useState } from "react";
 import { useAppDispatch } from "../../hooks";
-import { setActivePoint, setClickedEdit } from "../../store/actions";
+import { setActivePoint, setClickedEdit, setClickedButton } from "../../store/actions";
 import EditPointComponent from "../edit-point-component/edit-point-component";
 
 type PointComponentProps = {
@@ -26,7 +26,9 @@ function RoutePointComponent({ point, isActive }: PointComponentProps) {
 
   const handleOnClick = () => {
     setClicked(true);
-    dispatch(setActivePoint(id))
+    dispatch(setActivePoint(id));
+    dispatch(setClickedEdit(true));
+    dispatch(setClickedButton(false));
   };
 
   const handleIsFavorite = () => {
