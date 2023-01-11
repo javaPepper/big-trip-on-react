@@ -11,3 +11,6 @@ export const setClickedEdit = createAction('setClickedEdit',
 
 export const setType = createAction('setType',
 (type: string) => ({payload: type}))
+
+export const setFilterValue = createAction('setFilterValue',
+(value: string) => ({payload: value}))

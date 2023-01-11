@@ -1,11 +1,12 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { setClickedButton, setClickedEdit, setType, setActivePoint } from './actions';
+import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue } from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
   activeId: string,
   isClickedEdit: boolean,
   type: string,
+  filterValue: string,
 }
 
 const initialState: initialStateType = {
@@ -13,6 +14,7 @@ const initialState: initialStateType = {
   activeId: '',
   isClickedEdit: false,
   type: 'flight',
+  filterValue: '',
 }
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -28,5 +30,8 @@ export const reducer = createReducer(initialState, (builder) => {
   })
   .addCase(setType, (state, action: PayloadAction<string>) => {
     state.type = action.payload;
+  })
+  .addCase(setFilterValue, (state, action: PayloadAction<string>) =>{
+    state.filterValue = action.payload;
   })
 });

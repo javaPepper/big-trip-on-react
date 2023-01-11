@@ -10,4 +10,14 @@ export const destinations = ['Amsterdam', 'Chamonix','Geneva', 'Bruxells', 'Duss
 
 export const pointTypes = ["taxi", "bus", "train", "ship", "drive", "flight", "check-in", "sightseeing", "restaurant"];
 
-export const pointOffers = ['Order Uber', 'Add luggage', 'Switch to comfort', 'Rent a car', 'Add breakfast', 'Book tickets', 'Lunch in city'];
+export enum EmptyValues {
+  everything = 'Click New Event to create your first point',
+  past = 'There are no past events now',
+  future  = 'There are no future events now'
+}
+
+export enum FilterValues {
+  everything = 'Everything',
+  future = 'Future',
+  past = 'Past'
+}

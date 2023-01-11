@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import { setClickedButton } from "../../store/actions";
+import FilterList from "../filter-list/filter-list";
 
 function HeaderComponent() {
   const dispatch = useAppDispatch();
@@ -37,52 +38,7 @@ function HeaderComponent() {
             <div className="trip-controls__filters">
               <h2 className="visually-hidden">Filter events</h2>
               <form className="trip-filters" action="#" method="get">
-                <div className="trip-filters__filter">
-                  <input
-                    id="filter-everything"
-                    className="trip-filters__filter-input  visually-hidden"
-                    type="radio"
-                    name="trip-filter"
-                    defaultValue="everything"
-                    defaultChecked
-                  />
-                  <label
-                    className="trip-filters__filter-label"
-                    htmlFor="filter-everything"
-                  >
-                    Everything
-                  </label>
-                </div>
-                <div className="trip-filters__filter">
-                  <input
-                    id="filter-future"
-                    className="trip-filters__filter-input  visually-hidden"
-                    type="radio"
-                    name="trip-filter"
-                    defaultValue="future"
-                  />
-                  <label
-                    className="trip-filters__filter-label"
-                    htmlFor="filter-future"
-                  >
-                    Future
-                  </label>
-                </div>
-                <div className="trip-filters__filter">
-                  <input
-                    id="filter-past"
-                    className="trip-filters__filter-input  visually-hidden"
-                    type="radio"
-                    name="trip-filter"
-                    defaultValue="past"
-                  />
-                  <label
-                    className="trip-filters__filter-label"
-                    htmlFor="filter-past"
-                  >
-                    Past
-                  </label>
-                </div>
+                <FilterList/>
                 <button className="visually-hidden" type="submit">
                   Accept filter
                 </button>
