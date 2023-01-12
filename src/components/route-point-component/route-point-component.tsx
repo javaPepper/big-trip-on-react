@@ -43,7 +43,7 @@ function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
         <li className="trip-events__item">
           <div className="event">
             <time className="event__date" dateTime="2019-03-18">
-              {dateFormated.format("MMM d")}
+              {dateFormated.format("MMM DD")}
             </time>
             <div className="event__type">
               <img

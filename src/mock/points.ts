@@ -2,8 +2,8 @@ import { Point } from "../types/point";
 
 export const points: Point[] = [{
     basePrice: 150,
-    dateFrom: "2022-08-10T20:55:56",
-    dateTo:  "2022-08-12T13:22:13",
+    dateFrom: "2023-01-20T20:55:56",
+    dateTo:  "2023-01-22T13:22:13",
     destination: {
       description: "nice, good place",
       name: "Chamonix",
@@ -19,8 +19,8 @@ export const points: Point[] = [{
   },
   {
     basePrice: 20,
-    dateFrom: "2022-07-12T22:55:56",
-    dateTo:  "2022-07-13T19:22:13",
+    dateFrom: "2023-01-05T22:55:56",
+    dateTo:  "2023-01-06T19:22:13",
     destination: {
       description: "Lorem ipsum dolor sit amet",
       name: "Amsterdam",
@@ -36,8 +36,8 @@ export const points: Point[] = [{
   },
   {
     basePrice: 80,
-    dateFrom: "2022-07-13T22:55:56",
-    dateTo:  "2022-07-14T16:22:13",
+    dateFrom: "2023-01-08T16:22:13",
+    dateTo:  "2023-01-08T22:55:56",
     destination: {
       description: "Cras aliquet varius magna, non porta ligula feugiat eget",
       name: "Geneva",
@@ -53,8 +53,8 @@ export const points: Point[] = [{
   },
   {
     basePrice: 95,
-    dateFrom: "2022-07-14T22:55:56",
-    dateTo:  "2022-07-16T14:22:13",
+    dateFrom: "2023-01-14T22:55:56",
+    dateTo:  "2023-01-15T14:22:13",
     destination: {
       description: "Aliquam id orci ut lectus varius viverra",
       name: "Bruxells",
@@ -70,8 +70,8 @@ export const points: Point[] = [{
   },
   {
     basePrice: 100,
-    dateFrom: "2022-07-15T22:55:56",
-    dateTo:  "2022-07-16T12:22:13",
+    dateFrom: "2023-01-10T12:22:13",
+    dateTo:  "2023-01-10T22:55:56",
     destination: {
       description: "Phasellus eros mauris, condimentum sed nibh vitae",
       name: "Dusseldorf",

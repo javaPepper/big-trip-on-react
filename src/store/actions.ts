@@ -18,3 +18,6 @@ export const setFilterValue = createAction('setFilterValue',
 export const setSortedPoints = createAction('setSortedPoints',
 (value: string) => ({payload: value}))
 
+export const setClickedFilter = createAction('setClickedFilter',
+(value: boolean) => ({payload: value}))
+

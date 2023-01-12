@@ -1,13 +1,17 @@
+import dayjs from "dayjs";
+import { useState } from "react";
 import { useAppDispatch } from "../../hooks";
-import { setFilterValue } from "../../store/actions";
+import { setClickedFilter, setFilterValue } from "../../store/actions";
 
 type FilterComponentProps = {
   value: string;
   isEverything: boolean;
+  isClickedValue?: boolean;
 }
 
 function FilterComponent({value, isEverything }: FilterComponentProps) {
   const dispatch = useAppDispatch();
+
   return (
     <div className="trip-filters__filter">
       <input
@@ -19,6 +23,7 @@ function FilterComponent({value, isEverything }: FilterComponentProps) {
         defaultChecked={isEverything}
         onChange={(evt) => {
           dispatch(setFilterValue(evt.currentTarget.value));
+          dispatch(setClickedFilter(true));
         }}
       />
       <label className="trip-filters__filter-label" htmlFor={`filter-${value}`}>
