@@ -1,5 +1,4 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { Destination } from '../types/destination';
 import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue, setSortedPoints } from './actions';
 
 type initialStateType = {

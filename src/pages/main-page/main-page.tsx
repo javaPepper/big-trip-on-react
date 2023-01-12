@@ -4,7 +4,10 @@ import RoutePointsList from "../../components/route-points-list/route-points-lis
 import SortListComponent from "../../components/sort-list-component/sort-list-component";
 import { useAppSelector } from "../../hooks";
 import { points } from "../../mock/points";
+<<<<<<< HEAD
 import MainPageEmpty from "../main-page-empty/main-page-empty";
+=======
+>>>>>>> f038e49089ab420fde43b4517460c5d65673e848
 
 function MainPage() {
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
@@ -17,6 +20,7 @@ function MainPage() {
         <div className="page-body__container">
           <section className="trip-events">
             <h2 className="visually-hidden">Trip events</h2>
+<<<<<<< HEAD
             {points.length > 0 ? (
               <>
                 <form
@@ -36,6 +40,21 @@ function MainPage() {
             ) : (
               <MainPageEmpty />
             )}
+=======
+            <form
+              className="trip-events__trip-sort  trip-sort"
+              action="#"
+              method="get"
+            >
+              <SortListComponent />
+            </form>
+            <ul className="trip-events__list">
+              {!isClickedEdit && isClickedHeader && (
+                <AddNewPointComponent point={points[0]} />
+              )}
+              {<RoutePointsList />}
+            </ul>
+>>>>>>> f038e49089ab420fde43b4517460c5d65673e848
           </section>
         </div>
       </main>

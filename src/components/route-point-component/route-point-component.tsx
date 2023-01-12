@@ -6,12 +6,12 @@ import { useAppDispatch } from "../../hooks";
 import { setActivePoint, setClickedEdit, setClickedButton } from "../../store/actions";
 import EditPointComponent from "../edit-point-component/edit-point-component";
 
-type PointComponentProps = {
+type RoutePointComponentProps = {
   point: Point;
   isActive: boolean;
 };
 
-function RoutePointComponent({ point, isActive }: PointComponentProps) {
+function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
   const { basePrice, destination, type, offers, dateFrom, dateTo, id } = point;
   const dateFormated = dayjs(dateFrom);
   const timeFromFormated = dayjs(dateFrom);
@@ -37,9 +37,10 @@ function RoutePointComponent({ point, isActive }: PointComponentProps) {
 
   return (
     <>
-    {isActive && isClicked ?
-    (<EditPointComponent point={point}/>) :
-    (<li className="trip-events__item">
+      {isActive && isClicked ? (
+        <EditPointComponent point={point} />
+      ) : (
+        <li className="trip-events__item">
           <div className="event">
             <time className="event__date" dateTime="2019-03-18">
               {dateFormated.format("MMM d")}
@@ -84,14 +85,22 @@ function RoutePointComponent({ point, isActive }: PointComponentProps) {
               ))}
             </ul>
             <button
-              className={`event__favorite-btn ${isFavorite ? 'event__favorite-icon--active' : ''}`}
+              className={`event__favorite-btn ${
+                isFavorite ? "event__favorite-icon--active" : ""
+              }`}
               type="button"
               onClick={handleIsFavorite}
             >
               <span className="visually-hidden">Add to favorite</span>
-              <svg className="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
-                </svg>
+              <svg
+                className="event__favorite-icon"
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z" />
+              </svg>
             </button>
             <button
               className="event__rollup-btn"
@@ -101,7 +110,8 @@ function RoutePointComponent({ point, isActive }: PointComponentProps) {
               <span className="visually-hidden">Open event</span>
             </button>
           </div>
-        </li>)}
+        </li>
+      )}
     </>
   );
 }

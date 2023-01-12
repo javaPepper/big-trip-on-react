@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { destinations, pointTypes } from "../../const";
+import { pointTypes, destinations } from "../../const";
 import { useAppDispatch } from "../../hooks";
 import { pointOffers } from "../../mock/point-offers";
 import { setType } from "../../store/actions";
