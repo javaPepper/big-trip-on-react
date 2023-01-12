@@ -54,7 +54,7 @@ function RoutePointComponent({ point, isActive }: PointComponentProps) {
               />
             </div>
             <h3 className="event__title">
-              {type} {destination}
+              {type} {destination.name}
             </h3>
             <div className="event__schedule">
               <p className="event__time">

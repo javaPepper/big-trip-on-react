@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { Destination } from '../types/destination';
 
 export const setClickedButton = createAction('addNewPoint',
 (isClicked: boolean) => ({payload: isClicked}))
@@ -17,3 +18,4 @@ export const setFilterValue = createAction('setFilterValue',
 
 export const setSortedPoints = createAction('setSortedPoints',
 (value: string) => ({payload: value}))
+
