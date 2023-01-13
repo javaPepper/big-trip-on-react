@@ -2,15 +2,14 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { destinations, pointTypes } from "../../const";
-import { useAppDispatch } from "../../hooks";
 import { pointOffers } from "../../mock/point-offers";
-import { setType } from "../../store/actions";
 import { Point } from "../../types/point";
 import EventTypeComponent from "../event-type/event-type-component";
 import OfferComponent from "../offer/offer-component";
 import RoutePointComponent from "../route-point-component/route-point-component";
 import DestinationComponent from "../destination/destination-component";
 import { points } from "../../mock/points";
+import { offersByType } from "../../mock/offers-by-type";
 
 type EditPointComponentProps = {
   point: Point;
@@ -22,7 +21,8 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const [ endDate, setEndDate ] = useState<Date>(new Date());
   const [ isClosed, setClosed ] = useState<boolean>(false);
   const [ value, setValue ] = useState<string>(destination.name);
-  const dispatch = useAppDispatch();
+  const [ typeValue, setType ] = useState<string>('');
+  const [ isClickedType, setClickedType ] = useState<boolean>(false);
 
   const filteredOffers = [...pointOffers].filter(
     (offer) => offer.id === offers.find((el) => el === offer.id)
@@ -30,6 +30,10 @@ function EditPointComponent({ point }: EditPointComponentProps) {
 
   const destinationByClick = [...points].filter((el) => el.destination.name === value)
   const [ destinationPics ]  = destinationByClick;
+
+  const offersByClick = [...offersByType].find(
+    (offer) => offer.type === typeValue
+  )?.offers;
 
   const handleCloseEvent = () => {
     setClosed(!isClosed);
@@ -53,7 +57,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                     className="event__type-icon"
                     width={17}
                     height={17}
-                    src={`img/icons/${type}.png`}
+                    src={`img/icons/${isClickedType ? typeValue : type}.png`}
                     alt="Event type icon"
                   />
                 </label>
@@ -70,7 +74,8 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                         type={type}
                         key={type}
                         onClick={() => {
-                          dispatch(setType(type));
+                          setType(type);
+                          setClickedType(true);
                         }}
                       />
                     ))}
@@ -82,7 +87,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   className="event__label  event__type-output"
                   htmlFor="event-destination-1"
                 >
-                  {type}
+                  {typeValue}
                 </label>
                 <input
                   className="event__input  event__input--destination"
@@ -160,16 +165,18 @@ function EditPointComponent({ point }: EditPointComponentProps) {
               </button>
             </header>
             <section className="event__details">
+              {offersByClick?.length !== 0 &&
               <section className="event__section  event__section--offers">
                 <h3 className="event__section-title  event__section-title--offers">
                   Offers
                 </h3>
                 <div className="event__available-offers">
-                  {filteredOffers.map((offer) => (
+                  {(isClickedType ? typeValue : type) &&
+                  (isClickedType ? offersByClick : filteredOffers)?.map((offer) => (
                     <OfferComponent offer={offer} key={offer.id} />
                   ))}
                 </div>
-              </section>
+              </section>}
               <section className="event__section  event__section--destination">
                 <h3 className="event__section-title  event__section-title--destination">
                   Destination

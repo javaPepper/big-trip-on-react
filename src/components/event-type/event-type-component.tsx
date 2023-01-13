@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 
 type EventTypeComponentProps = {
-  type: string
+  type: string;
 } & HTMLAttributes<HTMLElement>
 
 function EventTypeComponent({type, onClick}: EventTypeComponentProps) {
