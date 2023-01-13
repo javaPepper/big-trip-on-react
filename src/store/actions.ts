@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
-export const setClickedButton = createAction('addNewPoint',
+export const setClickedButton = createAction('setClickeButton',
 (isClicked: boolean) => ({payload: isClicked}))
 
 export const setActivePoint = createAction('setActivePoint',

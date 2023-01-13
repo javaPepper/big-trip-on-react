@@ -4,34 +4,40 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import OfferComponent from "../offer/offer-component";
-import { Point } from "../../types/point";
-import { setType } from "../../store/actions";
+import DestinationComponent from "../destination/destination-component";
+import { points } from "../../mock/points";
+import { offersByType } from "../../mock/offers-by-type";
 import { useAppDispatch } from "../../hooks";
-import { pointOffers } from "../../mock/point-offers";
+import { setClickedButton } from "../../store/actions";
 
-type AddNewPointComponentProps = {
-  point: Point;
-}
-
-function AddNewPointComponent({point}: AddNewPointComponentProps) {
-  const { basePrice, dateFrom, dateTo, destination, id, isFavorite, offers, type } = point;
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
+function AddNewPointComponent() {
+  const [ startDate, setStartDate ] = useState<Date>(new Date());
+  const [ endDate, setEndDate ] = useState<Date>(new Date());
+  const [ priceValue, setPrice ] = useState<string>('');
+  const [ destinationValue, setDestination ] = useState<string>('');
+  const  [ typeValue, setType ] = useState<string>('flight');
+  const [ isClosed, setClosed ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const [priceValue, setPrice] = useState<string>("");
-  const [destinationValue, setDestination] = useState<string>("");
 
-  const getOffers = pointOffers.filter(
-    (offer) => offer.id === offers.find((el) => el === offer.id)
+  const handleOnClick = () => {
+    setClosed(!isClosed);
+    dispatch(setClickedButton(false));
+  }
+
+  const offers = [...offersByType].find(
+    (offer) => offer.type === typeValue
+  )?.offers;
+
+  const destinationByClick = [...points].filter(
+    (el) => el.destination.name === destinationValue
   );
+  const [destinationPics] = destinationByClick;
 
   return (
+    <>
+    {!isClosed &&
     <li className="trip-events__item">
-      <form
-        className="event event--edit"
-        action="#"
-        method="post"
-      >
+      <form className="event event--edit" action="#" method="post">
         <header className="event__header">
           <div className="event__type-wrapper">
             <label
@@ -43,7 +49,7 @@ function AddNewPointComponent({point}: AddNewPointComponentProps) {
                 className="event__type-icon"
                 width={17}
                 height={17}
-                src={`img/icons/${type}.png`}
+                src={`img/icons/${typeValue}.png`}
                 alt="Event type icon"
               />
             </label>
@@ -60,7 +66,7 @@ function AddNewPointComponent({point}: AddNewPointComponentProps) {
                     type={type}
                     key={type}
                     onClick={() => {
-                      dispatch(setType(type));
+                      setType(type);
                     }}
                   />
                 ))}
@@ -72,7 +78,7 @@ function AddNewPointComponent({point}: AddNewPointComponentProps) {
               className="event__label  event__type-output"
               htmlFor="event-destination-1"
             >
-              {type}
+              {typeValue}
             </label>
             <input
               className="event__input  event__input--destination"
@@ -82,8 +88,9 @@ function AddNewPointComponent({point}: AddNewPointComponentProps) {
               placeholder="Enter your destination"
               list="destination-list-1"
               onChange={(evt) => {
-                evt.preventDefault();
-                setDestination(evt.currentTarget.value);
+                if (evt.currentTarget.value !== "") {
+                  setDestination(evt.currentTarget.value);
+                }
               }}
             />
             <datalist id="destination-list-1">
@@ -137,73 +144,40 @@ function AddNewPointComponent({point}: AddNewPointComponentProps) {
               }}
             />
           </div>
-          <button
-          className="event__save-btn  btn  btn--blue"
-          type="submit"
-          >
+          <button className="event__save-btn  btn  btn--blue" type="submit">
             Save
           </button>
-          <button className="event__reset-btn" type="reset">
+          <button className="event__reset-btn" type="reset" onClick={handleOnClick}>
             Cancel
           </button>
         </header>
         <section className="event__details">
-          <section className="event__section  event__section--offers">
-            <h3 className="event__section-title  event__section-title--offers">
-              Offers
-            </h3>
-            <div className="event__available-offers">
-              {type &&
-                getOffers.map((offer) => (
-                  <OfferComponent
-                    offer={offer}
-                    key={offer.id}
-                  />
-                ))}
-            </div>
-          </section>
-          <section className="event__section  event__section--destination">
-            <h3 className="event__section-title  event__section-title--destination">
-              Destination
-            </h3>
-            <p className="event__destination-description">
-              Geneva is a city in Switzerland that lies at the southern tip of
-              expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura
-              mountains, the city has views of dramatic Mont Blanc.
-            </p>
-            <div className="event__photos-container">
-              <div className="event__photos-tape">
-                <img
-                  className="event__photo"
-                  src="img/photos/1.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/2.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/3.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/4.jpg"
-                  alt="Event photo"
-                />
-                <img
-                  className="event__photo"
-                  src="img/photos/5.jpg"
-                  alt="Event photo"
-                />
+          {offers?.length !== 0 && (
+            <section className="event__section  event__section--offers">
+              <h3 className="event__section-title  event__section-title--offers">
+                Offers
+              </h3>
+              <div className="event__available-offers">
+                {typeValue &&
+                  offers?.map((offer) => (
+                    <OfferComponent offer={offer} key={offer.id} />
+                  ))}
               </div>
-            </div>
-          </section>
+            </section>
+          )}
+          {destinationValue !== "" && (
+            <section className="event__section  event__section--destination">
+              <h3 className="event__section-title  event__section-title--destination">
+                Destination
+              </h3>
+              <DestinationComponent destination={destinationPics.destination} />
+            </section>
+          )}
         </section>
       </form>
-    </li>
+    </li>}
+    </>
+
   );
 }
 

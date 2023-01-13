@@ -6,7 +6,6 @@ import { useAppSelector } from "../../hooks";
 import { points } from "../../mock/points";
 import MainPageEmpty from "../main-page-empty/main-page-empty";
 
-
 function MainPage() {
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
   const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
@@ -28,9 +27,9 @@ function MainPage() {
                   <SortListComponent />
                 </form>
                 <ul className="trip-events__list">
-                  {!isClickedEdit && isClickedHeader && (
-                    <AddNewPointComponent point={points[0]} />
-                  )}
+                  {((!isClickedEdit && isClickedHeader) || isClickedHeader) &&
+                    <AddNewPointComponent />
+                  }
                   {<RoutePointsList />}
                 </ul>
               </>
