@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { Point } from '../types/point';
 
 export const setClickedButton = createAction('setClickeButton',
 (isClicked: boolean) => ({payload: isClicked}))
@@ -20,3 +21,9 @@ export const setSortedPoints = createAction('setSortedPoints',
 
 export const setClickedFilter = createAction('setClickedFilter',
 (value: boolean) => ({payload: value}))
+
+export const setDataPoints = createAction('setDataPoints',
+(points: Point[]) => ({payload: points}))
+
+export const setDataError = createAction('setDataError',
+(error: boolean) => ({payload: error}))

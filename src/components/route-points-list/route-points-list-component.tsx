@@ -1,10 +1,12 @@
-import { points } from "../../mock/points";
+//import { points } from "../../mock/points";
 import RoutePointComponent from "../route-point-component/route-point-component";
 import { useAppSelector } from "../../hooks";
-import { getFilteringValues, getSortingValues } from "../../utils";
+import { getFilteringValues, getRandomString, getSortingValues } from "../../utils";
+//console.log(getRandomString());
 
 function RoutePointsList() {
   const id = useAppSelector((state) => state.activeId);
+  const points = useAppSelector((state) => state.points);
   let sortedPoints = [...points].sort((a, b) => new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime());
   const sortValue = useAppSelector((state) => state.sortValue);
   sortedPoints = getSortingValues([...sortedPoints], sortValue);

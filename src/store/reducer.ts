@@ -1,5 +1,6 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue, setSortedPoints, setClickedFilter } from './actions';
+import { Point } from '../types/point';
+import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue, setSortedPoints, setClickedFilter, setDataPoints, setDataError } from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
@@ -9,6 +10,8 @@ type initialStateType = {
   filterValue: string,
   sortValue: string,
   isClickedFilter: boolean,
+  points: Point[],
+  error: boolean,
 }
 
 const initialState: initialStateType = {
@@ -19,6 +22,8 @@ const initialState: initialStateType = {
   filterValue: '',
   sortValue: '',
   isClickedFilter: false,
+  points: [],
+  error: false,
 }
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -43,5 +48,11 @@ export const reducer = createReducer(initialState, (builder) => {
   })
   .addCase(setClickedFilter, (state, action: PayloadAction<boolean>) => {
     state.isClickedFilter = action.payload;
+  })
+  .addCase(setDataPoints, (state, action: PayloadAction<Point[]>) => {
+    state.points = action.payload;
+  })
+  .addCase(setDataError, (state, action: PayloadAction<boolean>) => {
+    state.error = action.payload;
   })
 });

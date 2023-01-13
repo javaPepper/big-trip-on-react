@@ -1,3 +1,5 @@
+import { getRandomString } from "./utils";
+
 export enum SortRenderValues {
   day = 'Day',
   event = 'Event',
@@ -26,4 +28,13 @@ export enum FilterValues {
   everything = 'Everything',
   future = 'Future',
   past = 'Past'
+}
+
+export const BACKEND_URL = 'https://17.ecmascript.pages.academy/big-trip';
+export const REQUEST_TEMEOUT = 5000;
+
+export const enum ApiRoutes {
+  points = '/points',
+  destination = '/destination',
+  offers = '/offers',
 }

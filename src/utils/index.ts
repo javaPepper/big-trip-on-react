@@ -47,3 +47,8 @@ export const getFilteringValues = (points: Point[], currentValue: string) => {
     return points;
   }
 }
+
+export const getRandomString = () => {
+  const characters = 'abcdefghijklmnopqrstuvwxyz';
+  return Array.from(characters).map((el) => el += characters.charAt(Math.floor(Math.random() * characters.length)))
+}
