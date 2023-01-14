@@ -12,10 +12,10 @@ type RoutePointComponentProps = {
 };
 
 function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
-  const { basePrice, destination, type, offers, dateFrom, dateTo, id } = point;
-  const dateFormated = dayjs(dateFrom);
-  const timeFromFormated = dayjs(dateFrom);
-  const timeToFormated = dayjs(dateTo);
+  const { base_price, destination, type, offers, date_from, date_to, id } = point;
+  const dateFormated = dayjs(date_from);
+  const timeFromFormated = dayjs(date_from);
+  const timeToFormated = dayjs(date_to);
   const [ isClicked, setClicked ] = useState<boolean>(false);
   const [ isFavorite, setFavorite ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -72,7 +72,7 @@ function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
               </p>
             </div>
             <p className="event__price">
-              €&nbsp;<span className="event__price-value">{basePrice}</span>
+              €&nbsp;<span className="event__price-value">{base_price}</span>
             </p>
             <h4 className="visually-hidden">Offers:</h4>
             <ul className="event__selected-offers">

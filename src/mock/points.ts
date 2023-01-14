@@ -1,9 +1,9 @@
 import { Point } from "../types/point";
 
 export const points: Point[] = [{
-    basePrice: 150,
-    dateFrom: "2023-01-20T20:55:56",
-    dateTo:  "2023-01-22T13:22:13",
+    base_price: 150,
+    date_from: "2023-01-20T20:55:56",
+    date_to:  "2023-01-22T13:22:13",
     destination: {
       description: "nice, good place",
       name: "Chamonix",
@@ -18,9 +18,9 @@ export const points: Point[] = [{
     type: 'taxi',
   },
   {
-    basePrice: 20,
-    dateFrom: "2023-01-05T22:55:56",
-    dateTo:  "2023-01-06T19:22:13",
+    base_price: 20,
+    date_from: "2023-01-05T22:55:56",
+    date_to:  "2023-01-06T19:22:13",
     destination: {
       description: "Lorem ipsum dolor sit amet",
       name: "Amsterdam",
@@ -35,9 +35,9 @@ export const points: Point[] = [{
     type: 'bus',
   },
   {
-    basePrice: 80,
-    dateFrom: "2023-01-08T16:22:13",
-    dateTo:  "2023-01-08T22:55:56",
+    base_price: 80,
+    date_from: "2023-01-08T16:22:13",
+    date_to:  "2023-01-08T22:55:56",
     destination: {
       description: "Cras aliquet varius magna, non porta ligula feugiat eget",
       name: "Geneva",
@@ -52,9 +52,9 @@ export const points: Point[] = [{
     type: 'flight',
   },
   {
-    basePrice: 95,
-    dateFrom: "2023-01-14T22:55:56",
-    dateTo:  "2023-01-15T14:22:13",
+    base_price: 95,
+    date_from: "2023-01-14T22:55:56",
+    date_to:  "2023-01-15T14:22:13",
     destination: {
       description: "Aliquam id orci ut lectus varius viverra",
       name: "Bruxells",
@@ -69,9 +69,9 @@ export const points: Point[] = [{
     type: 'train',
   },
   {
-    basePrice: 100,
-    dateFrom: "2023-01-10T12:22:13",
-    dateTo:  "2023-01-10T22:55:56",
+    base_price: 100,
+    date_from: "2023-01-10T12:22:13",
+    date_to:  "2023-01-10T22:55:56",
     destination: {
       description: "Phasellus eros mauris, condimentum sed nibh vitae",
       name: "Dusseldorf",

@@ -1,9 +1,9 @@
 import { Destination } from "./destination"
 
 export type Point = {
-  basePrice: number,
-  dateFrom: string,
-  dateTo: string,
+  base_price: number,
+  date_from: string,
+  date_to: string,
   destination: Destination,
   id: string,
   isFavorite: boolean,

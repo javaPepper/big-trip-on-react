@@ -19,13 +19,13 @@ export const getSortingValues = (points: Point[], currentValue: string) => {
   let values: Point[] = [];
   switch(true) {
     case currentValue === SortingValues.price:
-      values = points.sort((a, b) => b.basePrice - a.basePrice);
+      values = points.sort((a, b) => b.base_price - a.base_price);
       return values;
     case currentValue === SortingValues.day:
-      values = points.sort((a, b) => new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime());
+      values = points.sort((a, b) => new Date(b.date_from).getTime() - new Date(a.date_from).getTime());
       return values;
     case currentValue === SortingValues.time:
-      values = points.sort((a, b) => dayjs(b.dateTo).diff(dayjs(b.dateFrom)) - dayjs(a.dateTo).diff(dayjs(a.dateFrom)));
+      values = points.sort((a, b) => dayjs(b.date_to).diff(dayjs(b.date_from)) - dayjs(a.date_to).diff(dayjs(a.date_from)));
       return values;
     default:
     return points;
@@ -38,17 +38,12 @@ export const getFilteringValues = (points: Point[], currentValue: string) => {
     case currentValue === FilterValues.everything:
       return points;
     case currentValue === FilterValues.future:
-      values = points.filter((point) => new Date(point.dateFrom) > new Date());
+      values = points.filter((point) => new Date(point.date_from) > new Date());
       return values;
     case currentValue === FilterValues.past:
-      values = points.filter((point) => new Date(point.dateFrom) < new Date());
+      values = points.filter((point) => new Date(point.date_from) < new Date());
       return values;
     default:
     return points;
   }
-}
-
-export const getRandomString = () => {
-  const characters = 'abcdefghijklmnopqrstuvwxyz';
-  return Array.from(characters).map((el) => el += characters.charAt(Math.floor(Math.random() * characters.length)))
 }

@@ -1,13 +1,13 @@
 //import { points } from "../../mock/points";
-import RoutePointComponent from "../route-point-component/route-point-component";
-import { useAppSelector } from "../../hooks";
-import { getFilteringValues, getRandomString, getSortingValues } from "../../utils";
-//console.log(getRandomString());
+import RoutePointComponent from '../route-point-component/route-point-component';
+import { useAppSelector } from '../../hooks';
+import { getFilteringValues, getSortingValues } from '../../utils';
+import dayjs from "dayjs";
 
 function RoutePointsList() {
   const id = useAppSelector((state) => state.activeId);
   const points = useAppSelector((state) => state.points);
-  let sortedPoints = [...points].sort((a, b) => new Date(b.dateFrom).getTime() - new Date(a.dateFrom).getTime());
+  let sortedPoints = [...points].sort((a, b) => new Date(b.date_from).getTime() - new Date(a.date_from).getTime());
   const sortValue = useAppSelector((state) => state.sortValue);
   sortedPoints = getSortingValues([...sortedPoints], sortValue);
   const filterValue = useAppSelector((state) => state.filterValue);

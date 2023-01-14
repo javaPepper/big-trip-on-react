@@ -1,5 +1,3 @@
-import { getRandomString } from "./utils";
-
 export enum SortRenderValues {
   day = 'Day',
   event = 'Event',

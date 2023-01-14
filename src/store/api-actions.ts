@@ -14,6 +14,11 @@ export const fetchPointsAction = createAsyncThunk<void, undefined, {
   async(_args, {dispatch, extra: api}) => {
     try {
       const {data} = await api.get<Point[]>(ApiRoutes.points);
+      console.log(data);
+      console.log('цена', data[16].base_price);
+      console.log('destination', data[16].destination);
+      console.log('дата', data[16].date_from);
+      console.log('id', data[16].id);
       dispatch(setDataPoints(data));
     }
     catch {

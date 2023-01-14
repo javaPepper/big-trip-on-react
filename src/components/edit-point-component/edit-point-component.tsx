@@ -16,7 +16,7 @@ type EditPointComponentProps = {
 };
 
 function EditPointComponent({ point }: EditPointComponentProps) {
-  const { basePrice, dateFrom, dateTo, destination, id, offers, type } = point;
+  const { base_price, date_from, date_to, destination, id, offers, type } = point;
   const [ startDate, setStartDate ] = useState<Date>(new Date());
   const [ endDate, setEndDate ] = useState<Date>(new Date());
   const [ isClosed, setClosed ] = useState<boolean>(false);
@@ -94,7 +94,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   id="event-destination-1"
                   type="text"
                   name="event-destination"
-                  defaultValue={destinationPics.destination.name}
+                  defaultValue={destination.name}
                   list="destination-list-1"
                   onChange={(evt) => {
                     if(evt.currentTarget.value !== '') {
@@ -114,13 +114,13 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   From
                 </label>
                 <DatePicker
-                  selected={new Date(dateFrom)}
+                  selected={new Date(date_from)}
                   dateFormat="dd/MM/yy H:mm"
                   onChange={(date: Date) => setStartDate(date)}
                   selectsStart
                   showTimeInput
-                  startDate={new Date(dateFrom)}
-                  endDate={new Date(dateTo)}
+                  startDate={new Date(date_from)}
+                  endDate={new Date(date_to)}
                   minDate={new Date()}
                 ></DatePicker>
                 —
@@ -128,14 +128,14 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   To
                 </label>
                 <DatePicker
-                  selected={new Date(dateTo)}
+                  selected={new Date(date_to)}
                   dateFormat="dd/MM/yy H:mm"
                   onChange={(date: Date) => setEndDate(date)}
                   selectsEnd
                   showTimeInput
-                  startDate={new Date(dateFrom)}
-                  endDate={new Date(dateTo)}
-                  minDate={new Date(dateFrom)}
+                  startDate={new Date(date_from)}
+                  endDate={new Date(date_to)}
+                  minDate={new Date(date_from)}
                 ></DatePicker>
               </div>
               <div className="event__field-group  event__field-group--price">
@@ -147,7 +147,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   id="event-price-1"
                   type="text"
                   name="event-price"
-                  defaultValue={basePrice}
+                  defaultValue={base_price}
                 />
               </div>
               <button className="event__save-btn  btn  btn--blue" type="submit">
@@ -181,7 +181,8 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                 <h3 className="event__section-title  event__section-title--destination">
                   Destination
                 </h3>
-                <DestinationComponent destination={destinationPics.destination}/>
+                {destination.name !== undefined &&
+                <DestinationComponent destination={destination}/>}
               </section>
             </section>
           </form>
