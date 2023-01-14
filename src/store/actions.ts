@@ -1,36 +1,40 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Destination } from '../types/destination';
+import { OffersByType } from '../types/offers-by-type';
 import { Point } from '../types/point';
 
 export const setClickedButton = createAction('setClickeButton',
-(isClicked: boolean) => ({payload: isClicked}))
+(isClicked: boolean) => ({payload: isClicked}));
 
 export const setActivePoint = createAction('setActivePoint',
-(activeId: string) => ({payload: activeId}))
+(activeId: string) => ({payload: activeId}));
 
 export const setClickedEdit = createAction('setClickedEdit',
 (isClicked: boolean) => ({payload: isClicked}))
 
 export const setType = createAction('setType',
-(type: string) => ({payload: type}))
+(type: string) => ({payload: type}));
 
 export const setFilterValue = createAction('setFilterValue',
-(value: string) => ({payload: value}))
+(value: string) => ({payload: value}));
 
 export const setSortedPoints = createAction('setSortedPoints',
-(value: string) => ({payload: value}))
+(value: string) => ({payload: value}));
 
 export const setClickedFilter = createAction('setClickedFilter',
-(value: boolean) => ({payload: value}))
+(value: boolean) => ({payload: value}));
 
 export const setDataPoints = createAction('setDataPoints',
-(points: Point[]) => ({payload: points}))
+(points: Point[]) => ({payload: points}));
 
 export const setDataError = createAction('setDataError',
-(error: boolean) => ({payload: error}))
+(error: boolean) => ({payload: error}));
 
 export const setDataDestinations = createAction('setDataDestinations',
-(value: Destination[]) => ({payload: value}))
+(value: Destination[]) => ({payload: value}));
 
 export const setDataDestinationsLoading = createAction('setDataDestLoading',
-(isLoading: boolean) => ({payload: isLoading}))
+(isLoading: boolean) => ({payload: isLoading}));
+
+export const setDataOffers = createAction('setDataOffers',
+(offers: OffersByType[]) => ({payload: offers}));

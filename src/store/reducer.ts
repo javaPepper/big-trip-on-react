@@ -1,7 +1,9 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { Destination } from '../types/destination';
+import { Offer } from '../types/offer';
+import { OffersByType } from '../types/offers-by-type';
 import { Point } from '../types/point';
-import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue, setSortedPoints, setClickedFilter, setDataPoints, setDataError, setDataDestinations, setDataDestinationsLoading } from './actions';
+import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue, setSortedPoints, setClickedFilter, setDataPoints, setDataError, setDataDestinations, setDataDestinationsLoading, setDataOffers } from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
@@ -15,6 +17,7 @@ type initialStateType = {
   error: boolean,
   destinations: Destination[],
   isDataLoading: boolean,
+  offers: OffersByType[],
 }
 
 const initialState: initialStateType = {
@@ -29,6 +32,7 @@ const initialState: initialStateType = {
   error: false,
   destinations: [],
   isDataLoading: false,
+  offers: [],
 }
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -65,5 +69,8 @@ export const reducer = createReducer(initialState, (builder) => {
   })
   .addCase(setDataDestinationsLoading, (state, action: PayloadAction<boolean>) => {
     state.isDataLoading = action.payload;
+  })
+  .addCase(setDataOffers, (state, action: PayloadAction<OffersByType[]>) => {
+    state.offers = action.payload;
   })
 });

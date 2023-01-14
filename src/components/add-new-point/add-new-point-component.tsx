@@ -5,10 +5,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import OfferComponent from "../offer/offer-component";
 import DestinationComponent from "../destination/destination-component";
-import { offersByType } from "../../mock/offers-by-type";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setClickedButton, setDataDestinationsLoading } from "../../store/actions";
-import { fetchDestinationsAction } from "../../store/api-actions";
+import { fetchDestinationsAction, fetchOffersAction } from "../../store/api-actions";
 import { getDestinationsNames } from '../../utils'
 
 function AddNewPointComponent() {
@@ -28,18 +27,17 @@ function AddNewPointComponent() {
   useEffect(() => {
     dispatch(fetchDestinationsAction());
     dispatch(setDataDestinationsLoading(true));
+    dispatch(fetchOffersAction());
   }, [dispatch]);
+
+  const offersByType = useAppSelector((state) => state.offers);
+  const offers = offersByType.find((offer) => offer.type === typeValue)?.offers;
 
   const destinations = useAppSelector((state) => state.destinations);
   const destNames = getDestinationsNames([...destinations]);
 
-  const offers = [...offersByType].find(
-    (offer) => offer.type === typeValue
-  )?.offers;
-
   const destinationByClick = [...destinations].filter(
-    (el) => el.name === destinationValue
-  );
+    (el) => el.name === destinationValue);
   const [destinationPics] = destinationByClick;
 
   return (
