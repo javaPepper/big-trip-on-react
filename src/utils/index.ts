@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { EmptyValues, FilterValues, SortingValues } from "../const";
+import { Destination } from "../types/destination";
 import { Point } from "../types/point";
 
 export const setEmptyValue = (value: string) => {
@@ -30,7 +31,7 @@ export const getSortingValues = (points: Point[], currentValue: string) => {
     default:
     return points;
   }
-}
+};
 
 export const getFilteringValues = (points: Point[], currentValue: string) => {
   let values: Point[] = [];
@@ -46,4 +47,15 @@ export const getFilteringValues = (points: Point[], currentValue: string) => {
     default:
     return points;
   }
-}
+};
+
+export const getDestinationsNames = (destinations: Destination[]) => {
+  let destinationsNames: string[] = [];
+  return () => {
+    destinations.map((el) => {
+      const {name} = el;
+      destinationsNames.push(name);
+    })
+    return destinationsNames;
+  }
+};

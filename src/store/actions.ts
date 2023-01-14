@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { Destination } from '../types/destination';
 import { Point } from '../types/point';
 
 export const setClickedButton = createAction('setClickeButton',
@@ -27,3 +28,9 @@ export const setDataPoints = createAction('setDataPoints',
 
 export const setDataError = createAction('setDataError',
 (error: boolean) => ({payload: error}))
+
+export const setDataDestinations = createAction('setDataDestinations',
+(value: Destination[]) => ({payload: value}))
+
+export const setDataDestinationsLoading = createAction('setDataDestLoading',
+(isLoading: boolean) => ({payload: isLoading}))

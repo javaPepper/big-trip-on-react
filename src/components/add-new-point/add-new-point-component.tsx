@@ -1,14 +1,15 @@
-import { destinations, pointTypes } from "../../const";
+import { pointTypes } from "../../const";
 import EventTypeComponent from "../event-type/event-type-component";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import OfferComponent from "../offer/offer-component";
 import DestinationComponent from "../destination/destination-component";
-import { points } from "../../mock/points";
 import { offersByType } from "../../mock/offers-by-type";
-import { useAppDispatch } from "../../hooks";
-import { setClickedButton } from "../../store/actions";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { setClickedButton, setDataDestinationsLoading } from "../../store/actions";
+import { fetchDestinationsAction } from "../../store/api-actions";
+import { getDestinationsNames } from '../../utils'
 
 function AddNewPointComponent() {
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -24,12 +25,20 @@ function AddNewPointComponent() {
     dispatch(setClickedButton(false));
   };
 
+  useEffect(() => {
+    dispatch(fetchDestinationsAction());
+    dispatch(setDataDestinationsLoading(true));
+  }, [dispatch]);
+
+  const destinations = useAppSelector((state) => state.destinations);
+  const destNames = getDestinationsNames([...destinations]);
+
   const offers = [...offersByType].find(
     (offer) => offer.type === typeValue
   )?.offers;
 
-  const destinationByClick = [...points].filter(
-    (el) => el.destination.name === destinationValue
+  const destinationByClick = [...destinations].filter(
+    (el) => el.name === destinationValue
   );
   const [destinationPics] = destinationByClick;
 
@@ -88,14 +97,14 @@ function AddNewPointComponent() {
                   placeholder="Enter your destination"
                   list="destination-list-1"
                   onChange={(evt) => {
-                    if (evt.currentTarget.value !== "") {
+                    if (evt.currentTarget.value !== '') {
                       setDestination(evt.currentTarget.value);
                     }
                   }}
                 />
                 <datalist id="destination-list-1">
-                  {destinations.map((point) => (
-                    <option value={point} key={point} />
+                  {destNames().map((name) => (
+                    <option value={name} key={name} />
                   ))}
                 </datalist>
               </div>
@@ -169,14 +178,12 @@ function AddNewPointComponent() {
                   </div>
                 </section>
               )}
-              {destinationValue !== "" && (
+              {destinationValue.length > 0 && (
                 <section className="event__section  event__section--destination">
                   <h3 className="event__section-title  event__section-title--destination">
                     Destination
                   </h3>
-                  <DestinationComponent
-                    destination={destinationPics.destination}
-                  />
+                 <DestinationComponent destination={destinationPics}/>
                 </section>
               )}
             </section>

@@ -1,8 +1,11 @@
 //import { points } from "../../mock/points";
 import RoutePointComponent from '../route-point-component/route-point-component';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getFilteringValues, getSortingValues } from '../../utils';
+import { useEffect } from 'react';
 import dayjs from "dayjs";
+import { setDataDestinationsLoading } from '../../store/actions';
+import Spinner from '../spinner/spinner';
 
 function RoutePointsList() {
   const id = useAppSelector((state) => state.activeId);
@@ -13,16 +16,24 @@ function RoutePointsList() {
   const filterValue = useAppSelector((state) => state.filterValue);
   const filteredPoints = getFilteringValues([...sortedPoints], filterValue);
   const isFiltered = useAppSelector((state) => state.isClickedFilter);
+  const dispatch = useAppDispatch();
+  const isDataLoading = useAppSelector((state) => state.isDataLoading);
+
+  useEffect(() => {
+    dispatch(setDataDestinationsLoading(true));
+  }, [dispatch]);
 
   return (
     <>
-      {(isFiltered ? filteredPoints : sortedPoints).map((point) => (
+      {isDataLoading && points.length > 0 ?
+      ((isFiltered ? filteredPoints : sortedPoints).map((point) => (
         <RoutePointComponent
           point={point}
           key={point.id}
           isActive={id === point.id}
         />
-      ))}
+      ))) :
+      <Spinner/>}
     </>
   );
 }

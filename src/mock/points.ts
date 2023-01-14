@@ -10,6 +10,14 @@ export const points: Point[] = [{
       pictures: [{
         src: "http://picsum.photos/248/152?r=12654",
         description: 'good, nice place'
+      },
+      {
+        src: "http://picsum.photos/248/152?r=645441",
+        description: 'good, nice place'
+      },
+      {
+        src: "http://picsum.photos/248/152?r=41546546",
+        description: 'good, nice place'
       }]
     },
     id: '1',

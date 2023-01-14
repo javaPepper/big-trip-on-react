@@ -33,6 +33,6 @@ export const REQUEST_TEMEOUT = 5000;
 
 export const enum ApiRoutes {
   points = '/points',
-  destination = '/destination',
+  destinations = '/destinations',
   offers = '/offers',
 }

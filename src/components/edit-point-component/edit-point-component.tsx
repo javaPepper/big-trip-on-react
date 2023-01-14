@@ -10,6 +10,7 @@ import RoutePointComponent from "../route-point-component/route-point-component"
 import DestinationComponent from "../destination/destination-component";
 import { points } from "../../mock/points";
 import { offersByType } from "../../mock/offers-by-type";
+import Spinner from "../spinner/spinner";
 
 type EditPointComponentProps = {
   point: Point;
@@ -181,8 +182,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                 <h3 className="event__section-title  event__section-title--destination">
                   Destination
                 </h3>
-                {destination.name !== undefined &&
-                <DestinationComponent destination={destination}/>}
+                <DestinationComponent destination={destinationPics.destination}/>
               </section>
             </section>
           </form>
