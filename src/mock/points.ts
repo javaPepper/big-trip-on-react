@@ -21,7 +21,7 @@ export const points: Point[] = [{
       }]
     },
     id: '1',
-    isFavorite: false,
+    is_favorite: false,
     offers: [1, 3],
     type: 'taxi',
   },
@@ -38,7 +38,7 @@ export const points: Point[] = [{
       }]
     },
     id: '2',
-    isFavorite: false,
+    is_favorite: false,
     offers: [5],
     type: 'bus',
   },
@@ -55,7 +55,7 @@ export const points: Point[] = [{
       }]
     },
     id: '3',
-    isFavorite: false,
+    is_favorite: false,
     offers: [10, 11],
     type: 'flight',
   },
@@ -72,7 +72,7 @@ export const points: Point[] = [{
       }]
     },
     id: '4',
-    isFavorite: false,
+    is_favorite: false,
     offers: [7],
     type: 'train',
   },
@@ -89,7 +89,7 @@ export const points: Point[] = [{
       }]
     },
     id: '5',
-    isFavorite: false,
+    is_favorite: false,
     offers: [14, 15],
     type: 'sightseeing',
   },

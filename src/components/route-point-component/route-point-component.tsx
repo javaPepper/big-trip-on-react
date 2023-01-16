@@ -25,6 +25,9 @@ function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
   );
 
   const handleOnClick = () => {
+    if(!id) {
+      return;
+    }
     setClicked(true);
     dispatch(setActivePoint(id));
     dispatch(setClickedEdit(true));

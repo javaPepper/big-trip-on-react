@@ -3,7 +3,7 @@ import { AppDispatch, State } from '../types/store';
 import { AxiosInstance } from 'axios';
 import { Point } from '../types/point';
 import { ApiRoutes } from '../const';
-import { setDataDestinations, setDataError, setDataOffers, setDataPoints } from './actions';
+import { setClickedButton, setClosed, setDataDestinations, setDataError, setDataOffers, setDataPoints } from './actions';
 import { Destination } from '../types/destination';
 import { OffersByType } from '../types/offers-by-type';
 
@@ -55,5 +55,23 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
     catch {
       dispatch(setDataError(true));
     }
+  }
+);
+
+export const postNewPointAction = createAsyncThunk<void, Point, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance,
+}>(
+  'postNewPoint',
+  async({base_price, date_from, date_to, destination, id, is_favorite, offers, type}, {dispatch, extra: api, getState}) => {
+    const {data} = await api.post<Point>(ApiRoutes.points,
+      {base_price, date_from, date_to, destination, id, is_favorite, offers, type});
+     if(!((getState().points).includes(data))) {
+      const newPoints = (getState().points).concat(data);
+      dispatch(setDataPoints(newPoints));
+      dispatch(setClosed(true));
+      dispatch(setClickedButton(false));
+     }
   }
 );

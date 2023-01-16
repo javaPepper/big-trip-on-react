@@ -6,11 +6,20 @@ import { Point } from '../types/point';
 export const setClickedButton = createAction('setClickeButton',
 (isClicked: boolean) => ({payload: isClicked}));
 
+export const setClosed = createAction('setClosed',
+(isClosed: boolean) => ({payload: isClosed}));
+
 export const setActivePoint = createAction('setActivePoint',
 (activeId: string) => ({payload: activeId}));
 
+export const setActiveOfferId = createAction('setActiveOfferId',
+(id: number) => ({payload: id}));
+
+export const setActiveOffers = createAction('setActiveOffers',
+(id: number[]) => ({payload: id}));
+
 export const setClickedEdit = createAction('setClickedEdit',
-(isClicked: boolean) => ({payload: isClicked}))
+(isClicked: boolean) => ({payload: isClicked}));
 
 export const setType = createAction('setType',
 (type: string) => ({payload: type}));

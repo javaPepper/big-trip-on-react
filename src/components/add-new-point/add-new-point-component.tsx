@@ -1,50 +1,85 @@
 import { pointTypes } from "../../const";
 import EventTypeComponent from "../event-type/event-type-component";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import OfferComponent from "../offer/offer-component";
 import DestinationComponent from "../destination/destination-component";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setClickedButton, setDataDestinationsLoading } from "../../store/actions";
-import { fetchDestinationsAction, fetchOffersAction } from "../../store/api-actions";
+import { fetchDestinationsAction, fetchOffersAction, postNewPointAction } from "../../store/api-actions";
 import { getDestinationsNames } from '../../utils'
+import { Point } from "../../types/point";
+import { Destination } from "../../types/destination";
 
 function AddNewPointComponent() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
-  const [priceValue, setPrice] = useState<string>('');
+  const [priceValue, setPrice] = useState<number>(0);
   const [destinationValue, setDestination] = useState<string>('');
+  const [destinationObject, setDestinationObject] = useState<Destination>({
+    description: "",
+    name: "",
+    pictures: [{
+      src: "",
+      description: ""
+    }]
+  })
   const [typeValue, setType] = useState<string>("flight");
   const [isClosed, setClosed] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const activeOffers = useAppSelector((state) => state.activeOffers);
+  const isClosedNewPoint = useAppSelector((state) => state.isClosed);
 
   const handleOnClick = () => {
     setClosed(!isClosed);
     dispatch(setClickedButton(false));
   };
 
+  const handleOnSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+    const postData: Point = {
+      base_price: priceValue,
+      date_from: startDate.toJSON(),
+      date_to: endDate.toJSON(),
+      destination: destinationObject,
+      is_favorite: false,
+      offers: activeOffers,
+      type: typeValue,
+    };
+      dispatch(postNewPointAction(postData));
+  };
+
   useEffect(() => {
     dispatch(fetchDestinationsAction());
     dispatch(setDataDestinationsLoading(true));
     dispatch(fetchOffersAction());
-  }, [dispatch]);
+    if(destinationValue) {
+      setDestinationObject({
+        ...destinationObject,
+        description: destination.description,
+        name: destination.name,
+        pictures: destination.pictures,
+      });
+    }
+  }, [dispatch, destinationValue]);
 
   const offersByType = useAppSelector((state) => state.offers);
-  const offers = offersByType.find((offer) => offer.type === typeValue)?.offers;
+  const theOffers = offersByType.find((offer) => offer.type === typeValue)?.offers;
 
   const destinations = useAppSelector((state) => state.destinations);
   const destNames = getDestinationsNames([...destinations]);
 
   const destinationByClick = [...destinations].filter(
     (el) => el.name === destinationValue);
-  const [destinationPics] = destinationByClick;
+  const [ destination ] = destinationByClick;
 
   return (
     <>
-      {!isClosed && (
+      {!isClosedNewPoint ?
+      (!isClosed && (
         <li className="trip-events__item">
-          <form className="event event--edit" action="#" method="post">
+          <form className="event event--edit" action="#" method="post" onSubmit={handleOnSubmit}>
             <header className="event__header">
               <div className="event__type-wrapper">
                 <label
@@ -95,10 +130,10 @@ function AddNewPointComponent() {
                   placeholder="Enter your destination"
                   list="destination-list-1"
                   onChange={(evt) => {
-                    if (evt.currentTarget.value !== '') {
-                      setDestination(evt.currentTarget.value);
-                    }
-                  }}
+                    const { value } = evt.currentTarget;
+                      if(value) {
+                      setDestination(value);
+                    }}}
                 />
                 <datalist id="destination-list-1">
                   {destNames().map((name) => (
@@ -147,11 +182,15 @@ function AddNewPointComponent() {
                   defaultValue=""
                   onChange={(evt) => {
                     evt.preventDefault();
-                    setPrice(evt.currentTarget.value);
+                    const { value } = evt.currentTarget;
+                    setPrice(+value);
                   }}
                 />
               </div>
-              <button className="event__save-btn  btn  btn--blue" type="submit">
+              <button
+              className="event__save-btn  btn  btn--blue"
+              type="submit"
+              >
                 Save
               </button>
               <button
@@ -163,15 +202,15 @@ function AddNewPointComponent() {
               </button>
             </header>
             <section className="event__details">
-              {offers?.length !== 0 && (
+              {theOffers?.length !== 0 && (
                 <section className="event__section  event__section--offers">
                   <h3 className="event__section-title  event__section-title--offers">
                     Offers
                   </h3>
                   <div className="event__available-offers">
                     {typeValue &&
-                      offers?.map((offer) => (
-                        <OfferComponent offer={offer} key={offer.id} />
+                      theOffers?.map((offer) => (
+                        <OfferComponent offer={offer} key={offer.id}/>
                       ))}
                   </div>
                 </section>
@@ -181,13 +220,15 @@ function AddNewPointComponent() {
                   <h3 className="event__section-title  event__section-title--destination">
                     Destination
                   </h3>
-                 <DestinationComponent destination={destinationPics}/>
+                {destinations.length > 0 &&
+                <DestinationComponent destination={destination}/>}
                 </section>
               )}
             </section>
           </form>
         </li>
-      )}
+      )) :
+      <></>}
     </>
   );
 }

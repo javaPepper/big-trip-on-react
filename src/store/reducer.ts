@@ -1,9 +1,11 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { Destination } from '../types/destination';
-import { Offer } from '../types/offer';
 import { OffersByType } from '../types/offers-by-type';
 import { Point } from '../types/point';
-import { setClickedButton, setClickedEdit, setType, setActivePoint, setFilterValue, setSortedPoints, setClickedFilter, setDataPoints, setDataError, setDataDestinations, setDataDestinationsLoading, setDataOffers } from './actions';
+import { setClickedButton, setActivePoint, setClickedEdit,
+  setType, setFilterValue, setSortedPoints, setClickedFilter,
+  setDataPoints, setDataError, setDataDestinations, setDataDestinationsLoading,
+  setDataOffers, setActiveOffers, setActiveOfferId, setClosed } from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
@@ -18,6 +20,9 @@ type initialStateType = {
   destinations: Destination[],
   isDataLoading: boolean,
   offers: OffersByType[],
+  activeOffers: number[],
+  activeOfferId: number,
+  isClosed: boolean,
 }
 
 const initialState: initialStateType = {
@@ -33,15 +38,27 @@ const initialState: initialStateType = {
   destinations: [],
   isDataLoading: false,
   offers: [],
+  activeOffers: [],
+  activeOfferId: 0,
+  isClosed: false,
 }
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
+  .addCase(setClosed, (state, action: PayloadAction<boolean>) => {
+    state.isClosed = action.payload;
+  })
   .addCase(setClickedButton, (state, action: PayloadAction<boolean>) => {
     state.isClickedHeader = action.payload;
   })
   .addCase(setActivePoint, (state, action: PayloadAction<string>) => {
     state.activeId = action.payload;
+  })
+  .addCase(setActiveOffers, (state, action: PayloadAction<number[]>) => {
+    state.activeOffers = action.payload;
+  })
+  .addCase(setActiveOfferId, (state, action: PayloadAction<number>) =>{
+    state.activeOfferId = action.payload;
   })
   .addCase(setClickedEdit, (state, action: PayloadAction<boolean>) => {
     state.isClickedEdit = action.payload;
