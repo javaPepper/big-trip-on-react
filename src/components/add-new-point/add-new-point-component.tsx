@@ -13,11 +13,11 @@ import { Point } from "../../types/point";
 import { Destination } from "../../types/destination";
 
 function AddNewPointComponent() {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
-  const [priceValue, setPrice] = useState<number>(0);
-  const [destinationValue, setDestination] = useState<string>('');
-  const [destinationObject, setDestinationObject] = useState<Destination>({
+  const [ startDate, setStartDate ] = useState<Date>(new Date());
+  const [ endDate, setEndDate ] = useState<Date>(new Date());
+  const [ priceValue, setPrice ] = useState<number>(0);
+  const [ destinationValue, setDestination ] = useState<string>('');
+  const [ destinationObject, setDestinationObject ] = useState<Destination>({
     description: "",
     name: "",
     pictures: [{
@@ -25,8 +25,8 @@ function AddNewPointComponent() {
       description: ""
     }]
   })
-  const [typeValue, setType] = useState<string>("flight");
-  const [isClosed, setClosed] = useState<boolean>(false);
+  const [ typeValue, setType ] = useState<string>("flight");
+  const [ isClosed, setClosed ] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const activeOffers = useAppSelector((state) => state.activeOffers);
   const isClosedNewPoint = useAppSelector((state) => state.isClosed);
@@ -208,8 +208,7 @@ function AddNewPointComponent() {
                     Offers
                   </h3>
                   <div className="event__available-offers">
-                    {typeValue &&
-                      theOffers?.map((offer) => (
+                    {theOffers?.map((offer) => (
                         <OfferComponent offer={offer} key={offer.id}/>
                       ))}
                   </div>

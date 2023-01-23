@@ -9,10 +9,11 @@ import MainPageEmpty from "../main-page-empty/main-page-empty";
 function MainPage() {
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
   const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
+  const totalPrice = useAppSelector((state) => state.pointPrice);
 
   return (
     <>
-      <HeaderComponent />
+      <HeaderComponent totalPrice={totalPrice}/>
       <main className="page-body__page-main  page-main">
         <div className="page-body__container">
           <section className="trip-events">

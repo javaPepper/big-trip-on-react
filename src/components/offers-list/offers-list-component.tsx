@@ -1,18 +1,17 @@
 import { useAppSelector } from "../../hooks";
-import { Offer } from "../../types/offer";
 import OfferComponent from "../offer/offer-component";
 
 type OfferListComponentProps = {
-  offer: Offer;
+  offers: number[];
 }
 
-function OffersListComponent({offer}: OfferListComponentProps) {
-  const activeOffers = useAppSelector((state) => state.activeOffers);
-  const [offerId] = activeOffers;
+function OffersListComponent({ offers}: OfferListComponentProps) {
+  const pointOffers = useAppSelector((state) => state.offers);
+  const offersByClick = [...pointOffers].find((offer) => offer.type === offer.type)?.offers;
 
   return(
     <div className="event__available-offers">
-      <OfferComponent offer={offer} isActive={offer.id !== offerId}/>
+      {offers.map((el) => offersByClick?.map((offer) => <OfferComponent offer={offer} key={offer.id} isChecked={offer.id === el}/>))}
     </div>
   )
 }

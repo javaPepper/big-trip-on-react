@@ -22,7 +22,8 @@ function FilterComponent({value, isEverything }: FilterComponentProps) {
         defaultValue={value}
         defaultChecked={isEverything}
         onChange={(evt) => {
-          dispatch(setFilterValue(evt.currentTarget.value));
+          const { value } = evt.currentTarget;
+          dispatch(setFilterValue(value));
           dispatch(setClickedFilter(true));
         }}
       />

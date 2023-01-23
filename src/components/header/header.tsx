@@ -2,7 +2,11 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setClickedButton } from "../../store/actions";
 import FilterList from "../filter-list/filter-list";
 
-function HeaderComponent() {
+type HeaderComponentProps = {
+  totalPrice: number;
+}
+
+function HeaderComponent({ totalPrice }: HeaderComponentProps) {
   const dispatch = useAppDispatch();
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
 
@@ -29,7 +33,7 @@ function HeaderComponent() {
               <p className="trip-info__dates">Mar 18&nbsp;—&nbsp;20</p>
             </div>
             <p className="trip-info__cost">
-              Total: €&nbsp;<span className="trip-info__cost-value">0</span>
+              Total: €&nbsp;<span className="trip-info__cost-value">{totalPrice}</span>
             </p>
           </section>
           <div className="trip-main__trip-controls  trip-controls">

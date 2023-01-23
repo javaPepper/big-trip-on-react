@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { EmptyValues, FilterValues, SortingValues } from "../const";
 import { Destination } from "../types/destination";
+import { Offer } from "../types/offer";
 import { Point } from "../types/point";
 
 export const setEmptyValue = (value: string) => {
@@ -57,5 +58,16 @@ export const getDestinationsNames = (destinations: Destination[]) => {
       destinationsNames.push(name);
     })
     return destinationsNames;
+  }
+};
+
+export const getOffersByPoint = (arr: Offer[], offers: number[]) => {
+  const pointOffers: Offer[][] = [];
+  return () => {
+    if(arr) {
+      const checkedOffers = arr?.filter((offer) => offers.find((el) => el === offer.id));
+      pointOffers.push(checkedOffers!);
+    }
+    return pointOffers;
   }
 };

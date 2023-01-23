@@ -1,10 +1,11 @@
 import { Point } from "../../types/point";
 import dayjs from "dayjs";
-import { pointOffers } from "../../mock/point-offers";
-import { useState } from "react";
-import { useAppDispatch } from "../../hooks";
-import { setActivePoint, setClickedEdit, setClickedButton } from "../../store/actions";
+import { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { setActivePoint, setClickedEdit, setClickedButton, setPointPrice } from "../../store/actions";
 import EditPointComponent from "../edit-point-component/edit-point-component";
+import { getOffersByPoint } from "../../utils";
+import { fetchOffersAction } from "../../store/api-actions";
 
 type RoutePointComponentProps = {
   point: Point;
@@ -12,23 +13,27 @@ type RoutePointComponentProps = {
 };
 
 function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
-  const { base_price, destination, type, offers, date_from, date_to, id } = point;
+  const { base_price, destination, type, offers, date_from, date_to, id, is_favorite } = point;
   const dateFormated = dayjs(date_from);
   const timeFromFormated = dayjs(date_from);
   const timeToFormated = dayjs(date_to);
   const [ isClicked, setClicked ] = useState<boolean>(false);
-  const [ isFavorite, setFavorite ] = useState<boolean>(false);
+  const [ isFavorite, setFavorite ] = useState<boolean>(is_favorite!);
+  const pointOffers = useAppSelector((state) => state.offers);
   const dispatch = useAppDispatch();
+  const theOffers = pointOffers.find((offer) => offer.type === type)?.offers;
 
-  const getOffers = pointOffers.filter(
-    (offer) => offer.id === offers.find((el) => el === offer.id)
-  );
+  useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [dispatch])
+
+  const offersFromServer = getOffersByPoint(theOffers!, offers);
 
   const handleOnClick = () => {
     if(!id) {
       return;
     }
-    setClicked(true);
+    setClicked(!isClicked);
     dispatch(setActivePoint(id));
     dispatch(setClickedEdit(true));
     dispatch(setClickedButton(false));
@@ -79,13 +84,14 @@ function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
             </p>
             <h4 className="visually-hidden">Offers:</h4>
             <ul className="event__selected-offers">
-              {getOffers.map((offer) => (
-                <li className="event__offer" key={offer.id}>
-                  <span className="event__offer-title">{offer.title}</span>{" "}
-                  +€&nbsp;
-                  <span className="event__offer-price">{offer.price}</span>
-                </li>
-              ))}
+              {offersFromServer()?.map((offer) => offer.map((el) =>
+               <li className="event__offer" key={el.id}>
+               <span className="event__offer-title">{el.title}</span>{" "}
+               +€&nbsp;
+               <span className="event__offer-price">{el.price}</span>
+             </li>
+                 )
+              )}
             </ul>
             <button
               className={`event__favorite-btn ${

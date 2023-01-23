@@ -5,7 +5,9 @@ import { Point } from '../types/point';
 import { setClickedButton, setActivePoint, setClickedEdit,
   setType, setFilterValue, setSortedPoints, setClickedFilter,
   setDataPoints, setDataError, setDataDestinations, setDataDestinationsLoading,
-  setDataOffers, setActiveOffers, setActiveOfferId, setClosed } from './actions';
+  setDataOffers, setActiveOffers, setActiveOfferId, setClosed, setClickedOffer,
+  setDeleted,
+  setPointPrice} from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
@@ -23,6 +25,9 @@ type initialStateType = {
   activeOffers: number[],
   activeOfferId: number,
   isClosed: boolean,
+  isClickedOffer: boolean,
+  isDeleted: boolean,
+  pointPrice: number,
 }
 
 const initialState: initialStateType = {
@@ -41,10 +46,22 @@ const initialState: initialStateType = {
   activeOffers: [],
   activeOfferId: 0,
   isClosed: false,
+  isClickedOffer: false,
+  isDeleted: false,
+  pointPrice: 0,
 }
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
+  .addCase(setPointPrice, (state, action: PayloadAction<number>) => {
+    state.pointPrice = action.payload;
+  })
+  .addCase(setDeleted, (state, action: PayloadAction<boolean>) => {
+    state.isDeleted = action.payload;
+  })
+  .addCase(setClickedOffer, (state, action: PayloadAction<boolean>) => {
+    state.isClickedOffer = action.payload;
+  })
   .addCase(setClosed, (state, action: PayloadAction<boolean>) => {
     state.isClosed = action.payload;
   })

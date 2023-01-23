@@ -3,6 +3,15 @@ import { Destination } from '../types/destination';
 import { OffersByType } from '../types/offers-by-type';
 import { Point } from '../types/point';
 
+export const setClickedOffer = createAction('setClickedOffer',
+(isClicked: boolean) => ({payload: isClicked}));
+
+export const setPointPrice = createAction('setPointPrice',
+(price: number) => ({payload: price}));
+
+export const setDeleted = createAction('setDeleted',
+(isDeleted: boolean) => ({payload: isDeleted}));
+
 export const setClickedButton = createAction('setClickeButton',
 (isClicked: boolean) => ({payload: isClicked}));
 

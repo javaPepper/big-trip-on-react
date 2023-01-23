@@ -4,10 +4,10 @@ import { setActiveOffers } from "../../store/actions";
 
 type OfferComponentProps = {
   offer: Offer;
-  isActive?: boolean;
+  isChecked?: boolean;
 }
 
-function OfferComponent({ offer, isActive }: OfferComponentProps) {
+function OfferComponent({ offer, isChecked }: OfferComponentProps) {
   const { id, title, price } = offer;
   const activeOffers = useAppSelector((state) => state.activeOffers);
   const dispatch = useAppDispatch();
@@ -19,12 +19,12 @@ function OfferComponent({ offer, isActive }: OfferComponentProps) {
         id={`event-offer-${id}`}
         type="checkbox"
         name="event-offer"
-        checked={isActive}
+        checked={isChecked}
         value={id}
         onChange={(evt) => {
-          const {value} = evt.currentTarget;
+          const { value } = evt.currentTarget;
           if(!([...activeOffers].includes(+value))) {
-            dispatch(setActiveOffers([...activeOffers, +value]))
+            dispatch(setActiveOffers([...activeOffers, +value]));
           }}}
       />
       <label

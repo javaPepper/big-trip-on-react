@@ -12,8 +12,6 @@ export enum SortingValues {
   time = 'sort-time'
 }
 
-export const destinations = ['Amsterdam', 'Chamonix','Geneva', 'Bruxells', 'Dusseldorf'];
-
 export const pointTypes = ["taxi", "bus", "train", "ship", "drive", "flight", "check-in", "sightseeing", "restaurant"];
 
 export enum EmptyValues {

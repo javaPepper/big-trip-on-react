@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { destinations, pointTypes } from "../../const";
-import { pointOffers } from "../../mock/point-offers";
+import { pointTypes } from "../../const";
 import { Point } from "../../types/point";
 import EventTypeComponent from "../event-type/event-type-component";
 import OfferComponent from "../offer/offer-component";
 import RoutePointComponent from "../route-point-component/route-point-component";
 import DestinationComponent from "../destination/destination-component";
-import { points } from "../../mock/points";
-import { offersByType } from "../../mock/offers-by-type";
-import Spinner from "../spinner/spinner";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getDestinationsNames } from "../../utils";
+import { deletePointAction, fetchDestinationsAction, fetchOffersAction, postEditPointAction } from "../../store/api-actions";
+import { setActiveOffers} from "../../store/actions";
+import { Destination } from "../../types/destination";
 
 type EditPointComponentProps = {
   point: Point;
@@ -18,35 +19,79 @@ type EditPointComponentProps = {
 
 function EditPointComponent({ point }: EditPointComponentProps) {
   const { base_price, date_from, date_to, destination, id, offers, type } = point;
-  const [ startDate, setStartDate ] = useState<Date>(new Date());
-  const [ endDate, setEndDate ] = useState<Date>(new Date());
+  const [ startDate, setStartDate ] = useState<Date>(new Date(date_from));
+  const [ endDate, setEndDate ] = useState<Date>(new Date(date_to));
   const [ isClosed, setClosed ] = useState<boolean>(false);
-  const [ value, setValue ] = useState<string>(destination.name);
-  const [ typeValue, setType ] = useState<string>('');
+  const [ destinationValue, setDestination ] = useState<string>(destination.name);
+  const [ priceValue, setPrice ] = useState<number>(base_price);
+  const [ typeValue, setType ] = useState<string>(type);
   const [ isClickedType, setClickedType ] = useState<boolean>(false);
+  const [ destinationObject, setDestinationObject ] = useState<Destination>({
+    description: "",
+    name: "",
+    pictures: [{
+      src: "",
+      description: ""
+    }]
+  });
 
-  const filteredOffers = [...pointOffers].filter(
-    (offer) => offer.id === offers.find((el) => el === offer.id)
-  );
-
-  const destinationByClick = [...points].filter((el) => el.destination.name === value)
-  const [ destinationPics ]  = destinationByClick;
-
-  const offersByClick = [...offersByType].find(
-    (offer) => offer.type === typeValue
-  )?.offers;
+  const points = useAppSelector((state) => state.points);
+  const pointOffers = useAppSelector((state) => state.offers);
+  let activeOffers = useAppSelector((state) => state.activeOffers);
+  const isDeleted = useAppSelector((state) => state.isDeleted);
+  const isClosedAfterEdit = useAppSelector((state) => state.isClosed);
+  const dispatch = useAppDispatch();
 
   const handleCloseEvent = () => {
     setClosed(!isClosed);
+    dispatch(setActiveOffers([]));
   };
+
+  //console.log(activeOffers.concat(offers));
+
+  const handleOnSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+    const postData: Point = {
+      base_price: priceValue,
+      date_from: startDate.toJSON(),
+      date_to: endDate.toJSON(),
+      destination: destinationObject,
+      is_favorite: false,
+      offers: activeOffers.concat(offers),
+      type: typeValue,
+      id: id,
+    };
+      dispatch(postEditPointAction(postData));
+  };
+
+  useEffect(() => {
+    dispatch(fetchDestinationsAction());
+    dispatch(fetchOffersAction());
+    if(destinationValue) {
+      setDestinationObject({
+        ...destinationObject,
+        description: destination.description,
+        name: destination.name,
+        pictures: destination.pictures,
+      });
+    };
+  }, [dispatch, destinationValue])
+
+  const destinationByClick = [...points].filter((el) => el.destination.name === destinationValue);
+  //const [ destinationPics ]  = destinationByClick; это важное!! не удалять. уйдет на сервер
+
+  const destinations = useAppSelector((state) => state.destinations);
+  const destNames = getDestinationsNames([...destinations]);
+
+  const offersByClick = [...pointOffers].find((offer) => offer.type === typeValue)?.offers;
 
   return (
     <>
-      {isClosed ? (
+      {isClosed  || isClosedAfterEdit ? (
         <RoutePointComponent point={point} isActive={id === point.id} />
-      ) : (
+      ) : ( isDeleted ? null :
         <li className="trip-events__item">
-          <form className="event event--edit" action="#" method="post">
+          <form className="event event--edit" action="#" method="post" onSubmit={handleOnSubmit} onReset={() => dispatch(deletePointAction(id!))}>
             <header className="event__header">
               <div className="event__type-wrapper">
                 <label
@@ -58,7 +103,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                     className="event__type-icon"
                     width={17}
                     height={17}
-                    src={`img/icons/${isClickedType ? typeValue : type}.png`}
+                    src={`img/icons/${typeValue }.png`}
                     alt="Event type icon"
                   />
                 </label>
@@ -66,6 +111,8 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   className="event__type-toggle  visually-hidden"
                   id="event-type-toggle-1"
                   type="checkbox"
+                  onChange={
+                    () => setClickedType(!isClickedType)}
                 />
                 <div className="event__type-list">
                   <fieldset className="event__type-group">
@@ -76,7 +123,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                         key={type}
                         onClick={() => {
                           setType(type);
-                          setClickedType(true);
+                          //setClickedType(!isClickedType);
                         }}
                       />
                     ))}
@@ -98,15 +145,16 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   defaultValue={destination.name}
                   list="destination-list-1"
                   onChange={(evt) => {
-                    if(evt.currentTarget.value !== '') {
-                      setValue(evt.currentTarget.value)
+                    const { value } = evt.currentTarget;
+                    if(value) {
+                      setDestination(value)
                       }
                     }
                   }
                 />
                 <datalist id="destination-list-1">
-                  {destinations.map((point) => (
-                    <option value={point} key={point}/>
+                  {destNames().map((name) => (
+                    <option value={name} key={name}/>
                   ))}
                 </datalist>
               </div>
@@ -115,13 +163,13 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   From
                 </label>
                 <DatePicker
-                  selected={new Date(date_from)}
+                  selected={startDate}
                   dateFormat="dd/MM/yy H:mm"
                   onChange={(date: Date) => setStartDate(date)}
                   selectsStart
                   showTimeInput
-                  startDate={new Date(date_from)}
-                  endDate={new Date(date_to)}
+                  startDate={startDate}
+                  endDate={endDate}
                   minDate={new Date()}
                 ></DatePicker>
                 —
@@ -129,14 +177,14 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   To
                 </label>
                 <DatePicker
-                  selected={new Date(date_to)}
+                  selected={endDate}
                   dateFormat="dd/MM/yy H:mm"
                   onChange={(date: Date) => setEndDate(date)}
                   selectsEnd
                   showTimeInput
-                  startDate={new Date(date_from)}
-                  endDate={new Date(date_to)}
-                  minDate={new Date(date_from)}
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
                 ></DatePicker>
               </div>
               <div className="event__field-group  event__field-group--price">
@@ -149,6 +197,11 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   type="text"
                   name="event-price"
                   defaultValue={base_price}
+                  onChange={(evt) => {
+                    evt.preventDefault();
+                    const { value } = evt.currentTarget;
+                    setPrice(+value);
+                  }}
                 />
               </div>
               <button className="event__save-btn  btn  btn--blue" type="submit">
@@ -172,17 +225,24 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   Offers
                 </h3>
                 <div className="event__available-offers">
-                  {(isClickedType ? typeValue : type) &&
-                  (isClickedType ? offersByClick : filteredOffers)?.map((offer) => (
-                    <OfferComponent offer={offer} key={offer.id} />
-                  ))}
+                  {isClickedType ?
+                  offersByClick?.map((offer) =>
+                  <OfferComponent offer={offer} key={offer.id}
+                  isChecked={false}
+                  />)
+                  :
+                  offersByClick?.map((offer) =>
+                  <OfferComponent offer={offer} key={offer.id}
+                  isChecked={offers.includes(offer.id)}
+                  />)
+                  }
                 </div>
               </section>}
               <section className="event__section  event__section--destination">
                 <h3 className="event__section-title  event__section-title--destination">
                   Destination
                 </h3>
-                <DestinationComponent destination={destinationPics.destination}/>
+                <DestinationComponent destination={destination}/>
               </section>
             </section>
           </form>
