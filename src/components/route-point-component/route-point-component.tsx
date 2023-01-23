@@ -2,7 +2,7 @@ import { Point } from "../../types/point";
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { setActivePoint, setClickedEdit, setClickedButton, setPointPrice } from "../../store/actions";
+import { setActivePoint, setClickedEdit, setClickedButton } from "../../store/actions";
 import EditPointComponent from "../edit-point-component/edit-point-component";
 import { getOffersByPoint } from "../../utils";
 import { fetchOffersAction } from "../../store/api-actions";
@@ -76,7 +76,7 @@ function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
                 </time>
               </p>
               <p className="event__duration">
-                {timeToFormated.diff(timeFromFormated, "hour")} часов
+                {timeToFormated.diff(timeFromFormated, "hour")} H
               </p>
             </div>
             <p className="event__price">

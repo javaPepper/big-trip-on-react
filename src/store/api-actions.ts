@@ -95,7 +95,6 @@ export const postEditPointAction = createAsyncThunk<void, Point, {
       dispatch(setDataPoints((getState().points).map((point) => point.id === data.id ? data : point)));
       dispatch(setClosed(true));
       dispatch(setClickedButton(false));
-      //dispatch(setClickedEdit(false));
     }
     catch {
       dispatch(setDataError(true));

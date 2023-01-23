@@ -47,8 +47,6 @@ function EditPointComponent({ point }: EditPointComponentProps) {
     dispatch(setActiveOffers([]));
   };
 
-  //console.log(activeOffers.concat(offers));
-
   const handleOnSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     const postData: Point = {
@@ -78,7 +76,6 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   }, [dispatch, destinationValue])
 
   const destinationByClick = [...points].filter((el) => el.destination.name === destinationValue);
-  //const [ destinationPics ]  = destinationByClick; это важное!! не удалять. уйдет на сервер
 
   const destinations = useAppSelector((state) => state.destinations);
   const destNames = getDestinationsNames([...destinations]);
@@ -123,7 +120,6 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                         key={type}
                         onClick={() => {
                           setType(type);
-                          //setClickedType(!isClickedType);
                         }}
                       />
                     ))}

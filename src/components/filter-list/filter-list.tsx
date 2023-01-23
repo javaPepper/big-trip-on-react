@@ -1,7 +1,6 @@
 import { FilterValues } from "../../const";
 import FilterComponent from "../filter-component/filter-component";
-import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppSelector } from "../../hooks";
 
 function FilterList() {
   const isClickedFilter = useAppSelector((state) => state.isClickedFilter);

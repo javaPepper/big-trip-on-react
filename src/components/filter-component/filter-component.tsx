@@ -1,5 +1,3 @@
-import dayjs from "dayjs";
-import { useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import { setClickedFilter, setFilterValue } from "../../store/actions";
 

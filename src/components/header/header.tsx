@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setClickedButton } from "../../store/actions";
 import FilterList from "../filter-list/filter-list";
+import dayjs from "dayjs";
 
 type HeaderComponentProps = {
   totalPrice: number;
@@ -9,6 +10,9 @@ type HeaderComponentProps = {
 function HeaderComponent({ totalPrice }: HeaderComponentProps) {
   const dispatch = useAppDispatch();
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
+  const points = useAppSelector((state) => state.points);
+  const startDate = dayjs(points[0].date_from).format('DD MMM');
+  const endDate = dayjs(points[points.length-1].date_from).format('DD MMM');
 
   const handleNewPointButton = () => {
     dispatch(setClickedButton(true));
@@ -28,9 +32,10 @@ function HeaderComponent({ totalPrice }: HeaderComponentProps) {
           <section className="trip-main__trip-info  trip-info">
             <div className="trip-info__main">
               <h1 className="trip-info__title">
-                Amsterdam — Chamonix — Geneva
+                {points.length > 3 &&
+                `${points[0].destination.name} - ... - ${points[points.length-1].destination.name}`}
               </h1>
-              <p className="trip-info__dates">Mar 18&nbsp;—&nbsp;20</p>
+              <p className="trip-info__dates">{`${startDate} - ${endDate}`}</p>
             </div>
             <p className="trip-info__cost">
               Total: €&nbsp;<span className="trip-info__cost-value">{totalPrice}</span>
