@@ -7,7 +7,7 @@ type FilterComponentProps = {
   isClickedValue?: boolean;
 }
 
-function FilterComponent({value, isEverything }: FilterComponentProps) {
+function FilterComponent({ value, isEverything }: FilterComponentProps) {
   const dispatch = useAppDispatch();
 
   return (

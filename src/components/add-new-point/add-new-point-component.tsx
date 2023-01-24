@@ -160,7 +160,7 @@ function AddNewPointComponent() {
                   To
                 </label>
                 <DatePicker
-                  selected={endDate}
+                  selected={startDate}
                   dateFormat="dd/MM/yy H:mm"
                   onChange={(date: Date) => setEndDate(date)}
                   selectsEnd

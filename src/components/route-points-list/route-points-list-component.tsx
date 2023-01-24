@@ -1,10 +1,10 @@
 import RoutePointComponent from '../route-point-component/route-point-component';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getFilteringValues, getSortingValues } from '../../utils';
+import { getFilteringValues, getSortingValues, getTotalPrice } from '../../utils';
 import { useEffect } from 'react';
-import { setDataDestinationsLoading, setPointPrice } from '../../store/actions';
+import { setDataDestinationsLoading, setPointsPrice } from '../../store/actions';
 import Spinner from '../spinner/spinner';
-import { fetchPointsAction } from '../../store/api-actions';
+import { fetchOffersAction, fetchPointsAction } from '../../store/api-actions';
 
 function RoutePointsList() {
   const id = useAppSelector((state) => state.activeId);
@@ -18,17 +18,14 @@ function RoutePointsList() {
   const isFiltered = useAppSelector((state) => state.isClickedFilter);
   const dispatch = useAppDispatch();
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
-
-  const getTotalPrice = () => {
-    let totalPrice: number = 0;
-      return points.reduce((acc, currentValue) => acc + currentValue.base_price , totalPrice);
-  };
+  const offers = useAppSelector((state) => state.offers);
 
   useEffect(() => {
     dispatch(fetchPointsAction());
+    dispatch(fetchOffersAction());
     dispatch(setDataDestinationsLoading(true));
-    dispatch(setPointPrice(getTotalPrice()));
-  }, [dispatch, getTotalPrice()]);
+    dispatch(setPointsPrice(getTotalPrice(points)));
+  }, [dispatch, getTotalPrice(points)]);
 
   return (
     <>
@@ -38,6 +35,7 @@ function RoutePointsList() {
           point={point}
           key={point.id}
           isActive={id === point.id}
+          pointOffers={(offers.find((offer) => offer.type === point.type)?.offers)!}
         />
       ))
        :

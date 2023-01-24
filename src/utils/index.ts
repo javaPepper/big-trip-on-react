@@ -71,3 +71,8 @@ export const getOffersByPoint = (arr: Offer[], offers: number[]) => {
     return pointOffers;
   }
 };
+
+export const getTotalPrice = (arr: Point[]) => {
+  let totalPrice: number = 0;
+    return arr.reduce((acc, currentValue) => acc + currentValue.base_price , totalPrice);
+};

@@ -1,33 +1,32 @@
 import { Point } from "../../types/point";
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { setActivePoint, setClickedEdit, setClickedButton } from "../../store/actions";
+import { useAppDispatch } from "../../hooks";
+import { setActivePoint, setClickedEdit, setClickedButton, setDeleted, setType } from "../../store/actions";
 import EditPointComponent from "../edit-point-component/edit-point-component";
 import { getOffersByPoint } from "../../utils";
-import { fetchOffersAction } from "../../store/api-actions";
+import { Offer } from "../../types/offer";
 
 type RoutePointComponentProps = {
   point: Point;
   isActive: boolean;
+  pointOffers: Offer[];
 };
 
-function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
+function RoutePointComponent({ point, isActive, pointOffers }: RoutePointComponentProps) {
   const { base_price, destination, type, offers, date_from, date_to, id, is_favorite } = point;
   const dateFormated = dayjs(date_from);
   const timeFromFormated = dayjs(date_from);
   const timeToFormated = dayjs(date_to);
   const [ isClicked, setClicked ] = useState<boolean>(false);
   const [ isFavorite, setFavorite ] = useState<boolean>(is_favorite!);
-  const pointOffers = useAppSelector((state) => state.offers);
   const dispatch = useAppDispatch();
-  const theOffers = pointOffers.find((offer) => offer.type === type)?.offers;
 
   useEffect(() => {
-    dispatch(fetchOffersAction());
-  }, [dispatch])
+    dispatch(setType(type));
+  }, [type, dispatch])
 
-  const offersFromServer = getOffersByPoint(theOffers!, offers);
+  const offersFromServer = getOffersByPoint(pointOffers!, offers);
 
   const handleOnClick = () => {
     if(!id) {
@@ -37,6 +36,7 @@ function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
     dispatch(setActivePoint(id));
     dispatch(setClickedEdit(true));
     dispatch(setClickedButton(false));
+    dispatch(setDeleted(false));
   };
 
   const handleIsFavorite = () => {
@@ -125,4 +125,4 @@ function RoutePointComponent({ point, isActive }: RoutePointComponentProps) {
   );
 }
 
-export default RoutePointComponent;
+export default  RoutePointComponent;

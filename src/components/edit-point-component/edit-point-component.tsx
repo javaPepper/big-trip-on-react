@@ -8,10 +8,9 @@ import OfferComponent from "../offer/offer-component";
 import RoutePointComponent from "../route-point-component/route-point-component";
 import DestinationComponent from "../destination/destination-component";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getDestinationsNames } from "../../utils";
-import { deletePointAction, fetchDestinationsAction, fetchOffersAction, postEditPointAction } from "../../store/api-actions";
-import { setActiveOffers} from "../../store/actions";
-import { Destination } from "../../types/destination";
+import { getDestinationsNames, getTotalPrice } from "../../utils";
+import { deletePointAction, fetchDestinationsAction, fetchOffersAction, fetchPointsAction, postEditPointAction } from "../../store/api-actions";
+import { setActiveOffers, setPointsPrice } from "../../store/actions";
 
 type EditPointComponentProps = {
   point: Point;
@@ -26,16 +25,9 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const [ priceValue, setPrice ] = useState<number>(base_price);
   const [ typeValue, setType ] = useState<string>(type);
   const [ isClickedType, setClickedType ] = useState<boolean>(false);
-  const [ destinationObject, setDestinationObject ] = useState<Destination>({
-    description: "",
-    name: "",
-    pictures: [{
-      src: "",
-      description: ""
-    }]
-  });
 
   const points = useAppSelector((state) => state.points);
+
   const pointOffers = useAppSelector((state) => state.offers);
   let activeOffers = useAppSelector((state) => state.activeOffers);
   const isDeleted = useAppSelector((state) => state.isDeleted);
@@ -47,13 +39,20 @@ function EditPointComponent({ point }: EditPointComponentProps) {
     dispatch(setActiveOffers([]));
   };
 
+  const handleOnReset = () => {
+    dispatch(deletePointAction(id!));
+    dispatch(fetchPointsAction());
+    dispatch(fetchOffersAction());
+    dispatch(setPointsPrice(getTotalPrice(points)));
+  };
+
   const handleOnSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     const postData: Point = {
       base_price: priceValue,
       date_from: startDate.toJSON(),
       date_to: endDate.toJSON(),
-      destination: destinationObject,
+      destination: destinationFromServer,
       is_favorite: false,
       offers: activeOffers.concat(offers),
       type: typeValue,
@@ -64,31 +63,25 @@ function EditPointComponent({ point }: EditPointComponentProps) {
 
   useEffect(() => {
     dispatch(fetchDestinationsAction());
-    dispatch(fetchOffersAction());
-    if(destinationValue) {
-      setDestinationObject({
-        ...destinationObject,
-        description: destination.description,
-        name: destination.name,
-        pictures: destination.pictures,
-      });
-    };
   }, [dispatch, destinationValue])
-
-  const destinationByClick = [...points].filter((el) => el.destination.name === destinationValue);
 
   const destinations = useAppSelector((state) => state.destinations);
   const destNames = getDestinationsNames([...destinations]);
+
+  const destinationByClick = [...destinations]
+  .filter((el) => el.name === destinationValue);
+  const [ destinationFromServer ] = destinationByClick;
 
   const offersByClick = [...pointOffers].find((offer) => offer.type === typeValue)?.offers;
 
   return (
     <>
       {isClosed  || isClosedAfterEdit ? (
-        <RoutePointComponent point={point} isActive={id === point.id} />
+        <RoutePointComponent point={point} isActive={id === point.id} pointOffers={offersByClick!}/>
       ) : ( isDeleted ? null :
         <li className="trip-events__item">
-          <form className="event event--edit" action="#" method="post" onSubmit={handleOnSubmit} onReset={() => dispatch(deletePointAction(id!))}>
+          <form className="event event--edit" action="#" method="post"
+            onSubmit={handleOnSubmit} onReset={handleOnReset}>
             <header className="event__header">
               <div className="event__type-wrapper">
                 <label
@@ -234,12 +227,14 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   }
                 </div>
               </section>}
-              <section className="event__section  event__section--destination">
+             {destinationValue.length > 0 &&
+             <section className="event__section  event__section--destination">
                 <h3 className="event__section-title  event__section-title--destination">
                   Destination
                 </h3>
-                <DestinationComponent destination={destination}/>
-              </section>
+                {destinations.length > 0 &&
+                <DestinationComponent destination={destinationFromServer}/>}
+              </section>}
             </section>
           </form>
         </li>

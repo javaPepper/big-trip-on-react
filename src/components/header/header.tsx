@@ -2,6 +2,9 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setClickedButton } from "../../store/actions";
 import FilterList from "../filter-list/filter-list";
 import dayjs from "dayjs";
+import { useEffect } from "react";
+import { fetchPointsAction } from "../../store/api-actions";
+import { memo } from "react";
 
 type HeaderComponentProps = {
   totalPrice: number;
@@ -11,8 +14,10 @@ function HeaderComponent({ totalPrice }: HeaderComponentProps) {
   const dispatch = useAppDispatch();
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
   const points = useAppSelector((state) => state.points);
-  const startDate = dayjs(points[0].date_from).format('DD MMM');
-  const endDate = dayjs(points[points.length-1].date_from).format('DD MMM');
+
+  useEffect(() => {
+    dispatch(fetchPointsAction());
+  }, [dispatch]);
 
   const handleNewPointButton = () => {
     dispatch(setClickedButton(true));
@@ -35,7 +40,10 @@ function HeaderComponent({ totalPrice }: HeaderComponentProps) {
                 {points.length > 3 &&
                 `${points[0].destination.name} - ... - ${points[points.length-1].destination.name}`}
               </h1>
-              <p className="trip-info__dates">{`${startDate} - ${endDate}`}</p>
+              <p className="trip-info__dates">
+                {points.length > 0 && `${dayjs(points[0].date_from).format('DD MMM')} -
+                ${dayjs(points[points.length-1].date_from).format('DD MMM')}`}
+                </p>
             </div>
             <p className="trip-info__cost">
               Total: €&nbsp;<span className="trip-info__cost-value">{totalPrice}</span>
@@ -66,4 +74,4 @@ function HeaderComponent({ totalPrice }: HeaderComponentProps) {
   );
 }
 
-export default HeaderComponent;
+export default memo(HeaderComponent, ((prevProps, nextProps) => prevProps.totalPrice === nextProps.totalPrice));

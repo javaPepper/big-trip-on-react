@@ -6,7 +6,7 @@ import { Point } from '../types/point';
 export const setClickedOffer = createAction('setClickedOffer',
 (isClicked: boolean) => ({payload: isClicked}));
 
-export const setPointPrice = createAction('setPointPrice',
+export const setPointsPrice = createAction('setPointsPrice',
 (price: number) => ({payload: price}));
 
 export const setDeleted = createAction('setDeleted',

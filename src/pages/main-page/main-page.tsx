@@ -3,13 +3,13 @@ import AddNewPointComponent from "../../components/add-new-point/add-new-point-c
 import RoutePointsList from "../../components/route-points-list/route-points-list-component";
 import SortListComponent from "../../components/sort-list-component/sort-list-component";
 import { useAppSelector } from "../../hooks";
-import { points } from "../../mock/points";
 import MainPageEmpty from "../main-page-empty/main-page-empty";
 
 function MainPage() {
   const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
   const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
-  const totalPrice = useAppSelector((state) => state.pointPrice);
+  const points = useAppSelector((state) => state.points);
+  const totalPrice = useAppSelector((state) => state.pointsPrice);
 
   return (
     <>

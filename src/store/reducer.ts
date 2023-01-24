@@ -7,7 +7,7 @@ import { setClickedButton, setActivePoint, setClickedEdit,
   setDataPoints, setDataError, setDataDestinations, setDataDestinationsLoading,
   setDataOffers, setActiveOffers, setActiveOfferId, setClosed, setClickedOffer,
   setDeleted,
-  setPointPrice} from './actions';
+  setPointsPrice} from './actions';
 
 type initialStateType = {
   isClickedHeader: boolean,
@@ -27,7 +27,7 @@ type initialStateType = {
   isClosed: boolean,
   isClickedOffer: boolean,
   isDeleted: boolean,
-  pointPrice: number,
+  pointsPrice: number,
 }
 
 const initialState: initialStateType = {
@@ -48,13 +48,13 @@ const initialState: initialStateType = {
   isClosed: false,
   isClickedOffer: false,
   isDeleted: false,
-  pointPrice: 0,
+  pointsPrice: 0,
 }
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
-  .addCase(setPointPrice, (state, action: PayloadAction<number>) => {
-    state.pointPrice = action.payload;
+  .addCase(setPointsPrice, (state, action: PayloadAction<number>) => {
+    state.pointsPrice = action.payload;
   })
   .addCase(setDeleted, (state, action: PayloadAction<boolean>) => {
     state.isDeleted = action.payload;
