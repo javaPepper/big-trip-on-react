@@ -1,7 +1,7 @@
 import { Point } from "../../types/point";
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setActivePoint, setClickedEdit, setClickedButton, setDeleted, setType } from "../../store/actions";
 import EditPointComponent from "../edit-point-component/edit-point-component";
 import { getOffersByPoint } from "../../utils";
@@ -20,6 +20,7 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
   const timeToFormated = dayjs(date_to);
   const [ isClicked, setClicked ] = useState<boolean>(false);
   const [ isFavorite, setFavorite ] = useState<boolean>(is_favorite!);
+  //const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -34,7 +35,7 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
     }
     setClicked(!isClicked);
     dispatch(setActivePoint(id));
-    dispatch(setClickedEdit(true));
+    //dispatch(setClickedEdit(true));
     dispatch(setClickedButton(false));
     dispatch(setDeleted(false));
   };

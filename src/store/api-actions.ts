@@ -3,7 +3,7 @@ import { AppDispatch, State } from '../types/store';
 import { AxiosInstance } from 'axios';
 import { Point } from '../types/point';
 import { ApiRoutes } from '../const';
-import { setClickedButton, setClosed, setDataDestinations,
+import { setClickedButton, setClickedEdit, setClosed, setDataDestinations,
 setDataError, setDataOffers, setDataPoints, setDeleted } from './actions';
 import { Destination } from '../types/destination';
 import { OffersByType } from '../types/offers-by-type';
@@ -95,6 +95,7 @@ export const postEditPointAction = createAsyncThunk<void, Point, {
       dispatch(setDataPoints((getState().points).map((point) => point.id === data.id ? data : point)));
       dispatch(setClosed(true));
       dispatch(setClickedButton(false));
+      dispatch(setClickedEdit(true));
     }
     catch {
       dispatch(setDataError(true));

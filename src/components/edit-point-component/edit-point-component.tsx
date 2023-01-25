@@ -25,11 +25,10 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const [ priceValue, setPrice ] = useState<number>(base_price);
   const [ typeValue, setType ] = useState<string>(type);
   const [ isClickedType, setClickedType ] = useState<boolean>(false);
+  const [ checkedOffers, setCheckedOffers ] = useState<number[]>(offers);
 
   const points = useAppSelector((state) => state.points);
-
   const pointOffers = useAppSelector((state) => state.offers);
-  let activeOffers = useAppSelector((state) => state.activeOffers);
   const isDeleted = useAppSelector((state) => state.isDeleted);
   const isClosedAfterEdit = useAppSelector((state) => state.isClosed);
   const dispatch = useAppDispatch();
@@ -54,7 +53,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
       date_to: endDate.toJSON(),
       destination: destinationFromServer,
       is_favorite: false,
-      offers: activeOffers.concat(offers),
+      offers: checkedOffers,
       type: typeValue,
       id: id,
     };
@@ -102,7 +101,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   id="event-type-toggle-1"
                   type="checkbox"
                   onChange={
-                    () => setClickedType(!isClickedType)}
+                    () => setClickedType(true)}
                 />
                 <div className="event__type-list">
                   <fieldset className="event__type-group">
@@ -223,6 +222,9 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   offersByClick?.map((offer) =>
                   <OfferComponent offer={offer} key={offer.id}
                   isChecked={offers.includes(offer.id)}
+                  setOfferId={() => (offers == checkedOffers)
+                    ? setCheckedOffers([...checkedOffers, offer.id]) :
+                    setCheckedOffers((prevState) => prevState.filter((el) => el !== offer.id))}
                   />)
                   }
                 </div>
