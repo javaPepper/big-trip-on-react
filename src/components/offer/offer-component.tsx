@@ -15,8 +15,6 @@ function OfferComponent({ offer, isChecked, offers }: OfferComponentProps) {
   const [ offerId, setOfferId ] = useState<number>(id);
   const [ checkedOffers, setCheckedOffers ] = useState<number[]>(offers!);
   const dispatch = useAppDispatch();
-  console.log('offerComp', checkedOffers);
-
 
   useEffect(() => {
     dispatch(setActiveOffers(checkedOffers));

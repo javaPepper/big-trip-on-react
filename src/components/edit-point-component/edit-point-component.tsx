@@ -26,14 +26,12 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const [ typeValue, setType ] = useState<string>(type);
   const [ isClickedType, setClickedType ] = useState<boolean>(false);
   const checkedOffers = useAppSelector((state) => state.activeOffers);
-  console.log('editPoint', checkedOffers);
 
   const points = useAppSelector((state) => state.points);
   const pointOffers = useAppSelector((state) => state.offers);
   const isDeleted = useAppSelector((state) => state.isDeleted);
   const isClosedAfterEdit = useAppSelector((state) => state.isClosed);
   const dispatch = useAppDispatch();
-  //console.log('isDeleted', isDeleted);
 
   const handleCloseEvent = () => {
     setClosed(!isClosed);
