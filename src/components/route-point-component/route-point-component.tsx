@@ -21,13 +21,9 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
   const [ isClicked, setClicked ] = useState<boolean>(false);
   const [ isFavorite, setFavorite ] = useState<boolean>(is_favorite!);
   const dispatch = useAppDispatch();
-  console.log('isActive', isActive, 'id', id);
-  console.log('isClicked', isClicked, 'id', id);
-
 
   useEffect(() => {
     dispatch(setType(type));
-    //dispatch(setActivePoint(id as string));
   }, [type, dispatch])
 
   const offersFromServer = getOffersByPoint(pointOffers!, offers);
