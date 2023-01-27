@@ -1,7 +1,7 @@
 import { Point } from "../../types/point";
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 import { setActivePoint, setClickedEdit, setClickedButton, setDeleted, setType } from "../../store/actions";
 import EditPointComponent from "../edit-point-component/edit-point-component";
 import { getOffersByPoint } from "../../utils";
@@ -9,7 +9,7 @@ import { Offer } from "../../types/offer";
 
 type RoutePointComponentProps = {
   point: Point;
-  isActive: boolean;
+  isActive?: boolean;
   pointOffers: Offer[];
 };
 
@@ -20,22 +20,22 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
   const timeToFormated = dayjs(date_to);
   const [ isClicked, setClicked ] = useState<boolean>(false);
   const [ isFavorite, setFavorite ] = useState<boolean>(is_favorite!);
-  //const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
   const dispatch = useAppDispatch();
+  console.log('isActive', isActive, 'id', id);
+  console.log('isClicked', isClicked, 'id', id);
+
 
   useEffect(() => {
     dispatch(setType(type));
+    //dispatch(setActivePoint(id as string));
   }, [type, dispatch])
 
   const offersFromServer = getOffersByPoint(pointOffers!, offers);
 
   const handleOnClick = () => {
-    if(!id) {
-      return;
-    }
     setClicked(!isClicked);
-    dispatch(setActivePoint(id));
-    //dispatch(setClickedEdit(true));
+    dispatch(setClickedEdit(true));
+    dispatch(setActivePoint(id as string));
     dispatch(setClickedButton(false));
     dispatch(setDeleted(false));
   };
@@ -49,7 +49,7 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
       {isActive && isClicked ? (
         <EditPointComponent point={point} />
       ) : (
-        <li className="trip-events__item">
+        <li className="trip-events__item" id={id}>
           <div className="event">
             <time className="event__date" dateTime="2019-03-18">
               {dateFormated.format("MMM DD")}

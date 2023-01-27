@@ -81,7 +81,7 @@ export const postNewPointAction = createAsyncThunk<void, Point, {
   }
 );
 
-export const postEditPointAction = createAsyncThunk<void, Point, {
+export const putEditPointAction = createAsyncThunk<void, Point, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance,

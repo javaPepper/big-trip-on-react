@@ -209,7 +209,7 @@ function AddNewPointComponent() {
                   </h3>
                   <div className="event__available-offers">
                     {theOffers?.map((offer) => (
-                        <OfferComponent offer={offer} key={offer.id}/>
+                        <OfferComponent offer={offer} key={offer.id} />
                       ))}
                   </div>
                 </section>

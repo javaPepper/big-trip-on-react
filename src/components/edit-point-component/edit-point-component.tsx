@@ -9,7 +9,7 @@ import RoutePointComponent from "../route-point-component/route-point-component"
 import DestinationComponent from "../destination/destination-component";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getDestinationsNames, getTotalPrice } from "../../utils";
-import { deletePointAction, fetchDestinationsAction, fetchOffersAction, fetchPointsAction, postEditPointAction } from "../../store/api-actions";
+import { deletePointAction, fetchDestinationsAction, fetchOffersAction, fetchPointsAction, putEditPointAction } from "../../store/api-actions";
 import { setActiveOffers, setPointsPrice } from "../../store/actions";
 
 type EditPointComponentProps = {
@@ -17,7 +17,7 @@ type EditPointComponentProps = {
 };
 
 function EditPointComponent({ point }: EditPointComponentProps) {
-  const { base_price, date_from, date_to, destination, id, offers, type } = point;
+  const { base_price, date_from, date_to, destination, id, offers, type, is_favorite } = point;
   const [ startDate, setStartDate ] = useState<Date>(new Date(date_from));
   const [ endDate, setEndDate ] = useState<Date>(new Date(date_to));
   const [ isClosed, setClosed ] = useState<boolean>(false);
@@ -25,13 +25,15 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const [ priceValue, setPrice ] = useState<number>(base_price);
   const [ typeValue, setType ] = useState<string>(type);
   const [ isClickedType, setClickedType ] = useState<boolean>(false);
-  const [ checkedOffers, setCheckedOffers ] = useState<number[]>(offers);
+  const checkedOffers = useAppSelector((state) => state.activeOffers);
+  console.log('editPoint', checkedOffers);
 
   const points = useAppSelector((state) => state.points);
   const pointOffers = useAppSelector((state) => state.offers);
   const isDeleted = useAppSelector((state) => state.isDeleted);
   const isClosedAfterEdit = useAppSelector((state) => state.isClosed);
   const dispatch = useAppDispatch();
+  //console.log('isDeleted', isDeleted);
 
   const handleCloseEvent = () => {
     setClosed(!isClosed);
@@ -52,12 +54,12 @@ function EditPointComponent({ point }: EditPointComponentProps) {
       date_from: startDate.toJSON(),
       date_to: endDate.toJSON(),
       destination: destinationFromServer,
-      is_favorite: false,
+      is_favorite: is_favorite,
       offers: checkedOffers,
       type: typeValue,
       id: id,
     };
-      dispatch(postEditPointAction(postData));
+      dispatch(putEditPointAction(postData));
   };
 
   useEffect(() => {
@@ -75,8 +77,8 @@ function EditPointComponent({ point }: EditPointComponentProps) {
 
   return (
     <>
-      {isClosed  || isClosedAfterEdit ? (
-        <RoutePointComponent point={point} isActive={id === point.id} pointOffers={offersByClick!}/>
+      {isClosed || isClosedAfterEdit ? (
+        <RoutePointComponent point={point} pointOffers={offersByClick!}/> //isActive={id === point.id} pointOffers={offersByClick!}/>
       ) : ( isDeleted ? null :
         <li className="trip-events__item">
           <form className="event event--edit" action="#" method="post"
@@ -217,14 +219,13 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                   offersByClick?.map((offer) =>
                   <OfferComponent offer={offer} key={offer.id}
                   isChecked={false}
+                  offers={offers}
                   />)
                   :
                   offersByClick?.map((offer) =>
                   <OfferComponent offer={offer} key={offer.id}
-                  isChecked={offers.includes(offer.id)}
-                  setOfferId={() => (offers == checkedOffers)
-                    ? setCheckedOffers([...checkedOffers, offer.id]) :
-                    setCheckedOffers((prevState) => prevState.filter((el) => el !== offer.id))}
+                  isChecked={!offers.includes(offer.id)}
+                  offers={offers}
                   />)
                   }
                 </div>
