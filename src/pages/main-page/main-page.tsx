@@ -1,15 +1,23 @@
-import HeaderComponent from "../../components/header/header";
-import AddNewPointComponent from "../../components/add-new-point/add-new-point-component";
-import RoutePointsList from "../../components/route-points-list/route-points-list-component";
-import SortListComponent from "../../components/sort-list-component/sort-list-component";
-import { useAppSelector } from "../../hooks";
-import MainPageEmpty from "../main-page-empty/main-page-empty";
+import HeaderComponent from '../../components/header/header';
+import AddNewPointComponent from '../../components/add-new-point/add-new-point';
+import RoutePointsList from '../../components/route-points-list/route-points-list';
+import SortListComponent from '../../components/sort-list/sort-list';
+import { useAppSelector } from '../../hooks';
+import MainPageEmpty from '../main-page-empty/main-page-empty';
+import { useMemo } from 'react';
 
 function MainPage() {
-  const isClickedHeader = useAppSelector((state) => state.isClickedHeader);
-  const isClickedEdit = useAppSelector((state) => state.isClickedEdit);
+  const isClickedAddNewButton = useAppSelector((state) => state.isClickedAddNewButton);
   const points = useAppSelector((state) => state.points);
-  const totalPrice = useAppSelector((state) => state.pointsPrice);
+  const prices = useAppSelector((state) => state.pointsPrice);
+  const offers = useAppSelector((state) => state.offers);
+
+  const offersPrices = offers.reduce((arr, current) => {
+    const currentOfferPrice = current.offers.reduce((acc, offerPrice) => acc + offerPrice.price, 0);
+    return arr + currentOfferPrice;
+  }, 0);
+
+  const totalPrice = useMemo(() => prices + offersPrices, [prices, offersPrices]);
 
   return (
     <>
@@ -28,9 +36,7 @@ function MainPage() {
                   <SortListComponent />
                 </form>
                 <ul className="trip-events__list">
-                  {((!isClickedEdit && isClickedHeader) || isClickedHeader) &&
-                    <AddNewPointComponent />
-                  }
+                  {isClickedAddNewButton && <AddNewPointComponent/>}
                   {<RoutePointsList />}
                 </ul>
               </>

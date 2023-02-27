@@ -1,7 +1,7 @@
-import { Offer } from "../../types/offer";
-import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../hooks";
-import { setActiveOffers } from "../../store/actions";
+import { Offer } from '../../types/offer';
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setActiveOffers } from '../../store/actions';
 
 type OfferComponentProps = {
   offer: Offer;
@@ -12,13 +12,9 @@ type OfferComponentProps = {
 function OfferComponent({ offer, isChecked, offers }: OfferComponentProps) {
   const { id, title, price } = offer;
   const [ isActive, setActive ] = useState<boolean>(false);
-  const [ offerId, setOfferId ] = useState<number>(id);
-  const [ checkedOffers, setCheckedOffers ] = useState<number[]>(offers!);
+  const activeOffers = useAppSelector((state) => state.activeOffers);
+  offers = activeOffers;
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(setActiveOffers(checkedOffers));
-  }, [dispatch, checkedOffers]);
 
   return (
     <div className="event__offer-selector" >
@@ -27,13 +23,14 @@ function OfferComponent({ offer, isChecked, offers }: OfferComponentProps) {
         id={`event-offer-${id}`}
         type="checkbox"
         name="event-offer"
-        checked={isActive === isChecked}
+        checked={isChecked || isActive}
         value={id}
-        onChange={() => {
-          setOfferId!(id);
-          isActive ? setCheckedOffers(checkedOffers.filter((el) => el !== id)) :
-          setCheckedOffers([...checkedOffers, offerId]);
+        onChange={(evt) => {
+          const { value } = evt.currentTarget;
           setActive(!isActive);
+          (!isActive && !(offers?.includes(+value) ?? false)) ?
+            dispatch(setActiveOffers([...offers as number[], +value])) :
+            dispatch(setActiveOffers([...offers as number[]].filter((el) => el !== id)));
         }}
       />
       <label

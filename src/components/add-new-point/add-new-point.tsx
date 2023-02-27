@@ -1,39 +1,49 @@
-import { pointTypes } from "../../const";
-import EventTypeComponent from "../event-type/event-type-component";
-import { useState, useEffect, FormEvent } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import OfferComponent from "../offer/offer-component";
-import DestinationComponent from "../destination/destination-component";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { setClickedButton, setDataDestinationsLoading } from "../../store/actions";
-import { fetchDestinationsAction, fetchOffersAction, postNewPointAction } from "../../store/api-actions";
-import { getDestinationsNames } from '../../utils'
-import { Point } from "../../types/point";
-import { Destination } from "../../types/destination";
+import { pointTypes } from '../../const';
+import EventTypeComponent from '../event-type/event-type';
+import { useState, useEffect, FormEvent } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import OfferComponent from '../offer/offer';
+import DestinationComponent from '../destination/destination';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import {
+  setClickedAddNewButton,
+  setClosed,
+  setDataDestinationsLoading,
+} from '../../store/actions';
+import {
+  fetchDestinationsAction,
+  fetchOffersAction,
+  postNewPointAction,
+} from '../../store/api-actions';
+import { getDestinationsNames } from '../../utils';
+import { Point } from '../../types/point';
+import { Destination } from '../../types/destination';
 
 function AddNewPointComponent() {
+  const [ isClickedFieldset, setClickedFieldset ] = useState<boolean>(false);
   const [ startDate, setStartDate ] = useState<Date>(new Date());
-  const [ endDate, setEndDate ] = useState<Date>(new Date());
+  const [ endDate, setEndDate ] = useState<Date>(startDate);
   const [ priceValue, setPrice ] = useState<number>(0);
   const [ destinationValue, setDestination ] = useState<string>('');
   const [ destinationObject, setDestinationObject ] = useState<Destination>({
-    description: "",
-    name: "",
-    pictures: [{
-      src: "",
-      description: ""
-    }]
-  })
-  const [ typeValue, setType ] = useState<string>("flight");
-  const [ isClosed, setClosed ] = useState<boolean>(false);
+    description: '',
+    name: '',
+    pictures: [
+      {
+        src: '',
+        description: '',
+      },
+    ],
+  });
+  const [ typeValue, setType ] = useState<string>('');
   const dispatch = useAppDispatch();
   const activeOffers = useAppSelector((state) => state.activeOffers);
-  const isClosedNewPoint = useAppSelector((state) => state.isClosed);
+  const isClosed = useAppSelector((state) => state.isClosed);
 
   const handleOnClick = () => {
-    setClosed(!isClosed);
-    dispatch(setClickedButton(false));
+    dispatch(setClosed(false));
+    dispatch(setClickedAddNewButton(false));
   };
 
   const handleOnSubmit = (evt: FormEvent) => {
@@ -42,19 +52,19 @@ function AddNewPointComponent() {
       base_price: priceValue,
       date_from: startDate.toJSON(),
       date_to: endDate.toJSON(),
-      destination: destinationObject,
+      destination: destination,
       is_favorite: false,
       offers: activeOffers,
       type: typeValue,
     };
-      dispatch(postNewPointAction(postData));
+    dispatch(postNewPointAction(postData));
   };
 
   useEffect(() => {
     dispatch(fetchDestinationsAction());
     dispatch(setDataDestinationsLoading(true));
     dispatch(fetchOffersAction());
-    if(destinationValue) {
+    if (destinationValue) {
       setDestinationObject({
         ...destinationObject,
         description: destination.description,
@@ -62,24 +72,30 @@ function AddNewPointComponent() {
         pictures: destination.pictures,
       });
     }
-  }, [dispatch, destinationValue]);
-
-  const offersByType = useAppSelector((state) => state.offers);
-  const theOffers = offersByType.find((offer) => offer.type === typeValue)?.offers;
+  }, [dispatch]);
 
   const destinations = useAppSelector((state) => state.destinations);
   const destNames = getDestinationsNames([...destinations]);
-
   const destinationByClick = [...destinations].filter(
-    (el) => el.name === destinationValue);
-  const [ destination ] = destinationByClick;
+    (el) => el.name === destinationValue
+  );
+  const [destination] = destinationByClick;
+
+  const offersByType = useAppSelector((state) => state.offers);
+  const theOffers = offersByType.find(
+    (offer) => offer.type === typeValue
+  )?.offers;
 
   return (
     <>
-      {!isClosedNewPoint ?
-      (!isClosed && (
+      {!isClosed ? (
         <li className="trip-events__item">
-          <form className="event event--edit" action="#" method="post" onSubmit={handleOnSubmit}>
+          <form
+            className="event event--edit"
+            action="#"
+            method="post"
+            onSubmit={handleOnSubmit}
+          >
             <header className="event__header">
               <div className="event__type-wrapper">
                 <label
@@ -91,7 +107,7 @@ function AddNewPointComponent() {
                     className="event__type-icon"
                     width={17}
                     height={17}
-                    src={`img/icons/${typeValue}.png`}
+                    src={`img/icons/${typeValue ? typeValue : offersByType[0].type}.png`}
                     alt="Event type icon"
                   />
                 </label>
@@ -99,6 +115,8 @@ function AddNewPointComponent() {
                   className="event__type-toggle  visually-hidden"
                   id="event-type-toggle-1"
                   type="checkbox"
+                  checked={isClickedFieldset}
+                  onChange={() => setClickedFieldset(true)}
                 />
                 <div className="event__type-list">
                   <fieldset className="event__type-group">
@@ -107,8 +125,9 @@ function AddNewPointComponent() {
                       <EventTypeComponent
                         type={type}
                         key={type}
-                        onClick={() => {
+                        onChange={() => {
                           setType(type);
+                          setClickedFieldset(!isClickedFieldset);
                         }}
                       />
                     ))}
@@ -126,14 +145,15 @@ function AddNewPointComponent() {
                   className="event__input  event__input--destination"
                   id="event-destination-1"
                   type="text"
-                  name="event-destination"
+                  name="event-type"
                   placeholder="Enter your destination"
                   list="destination-list-1"
                   onChange={(evt) => {
                     const { value } = evt.currentTarget;
-                      if(value) {
+                    if (value) {
                       setDestination(value);
-                    }}}
+                    }
+                  }}
                 />
                 <datalist id="destination-list-1">
                   {destNames().map((name) => (
@@ -154,7 +174,8 @@ function AddNewPointComponent() {
                   startDate={startDate}
                   endDate={endDate}
                   minDate={new Date()}
-                ></DatePicker>
+                >
+                </DatePicker>
                 —
                 <label className="visually-hidden" htmlFor="event-end-time-1">
                   To
@@ -168,7 +189,8 @@ function AddNewPointComponent() {
                   startDate={startDate}
                   endDate={endDate}
                   minDate={startDate}
-                ></DatePicker>
+                >
+                </DatePicker>
               </div>
               <div className="event__field-group  event__field-group--price">
                 <label className="event__label" htmlFor="event-price-1">
@@ -178,7 +200,7 @@ function AddNewPointComponent() {
                   className="event__input  event__input--price"
                   id="event-price-1"
                   type="text"
-                  name="event-price"
+                  name="event-type"
                   defaultValue=""
                   onChange={(evt) => {
                     evt.preventDefault();
@@ -188,8 +210,8 @@ function AddNewPointComponent() {
                 />
               </div>
               <button
-              className="event__save-btn  btn  btn--blue"
-              type="submit"
+                className="event__save-btn  btn  btn--blue"
+                type="submit"
               >
                 Save
               </button>
@@ -209,8 +231,8 @@ function AddNewPointComponent() {
                   </h3>
                   <div className="event__available-offers">
                     {theOffers?.map((offer) => (
-                        <OfferComponent offer={offer} key={offer.id} />
-                      ))}
+                      <OfferComponent offer={offer} key={offer.id} />
+                    ))}
                   </div>
                 </section>
               )}
@@ -219,15 +241,15 @@ function AddNewPointComponent() {
                   <h3 className="event__section-title  event__section-title--destination">
                     Destination
                   </h3>
-                {destinations.length > 0 &&
-                <DestinationComponent destination={destination}/>}
+                  {destinations.length > 0 && (
+                    <DestinationComponent destination={destination} />
+                  )}
                 </section>
               )}
             </section>
           </form>
         </li>
-      )) :
-      <></>}
+      ) : null}
     </>
   );
 }

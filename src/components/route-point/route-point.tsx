@@ -1,43 +1,49 @@
-import { Point } from "../../types/point";
-import dayjs from "dayjs";
-import { useState, useEffect } from "react";
-import { useAppDispatch } from "../../hooks";
-import { setActivePoint, setClickedEdit, setClickedButton, setDeleted, setType } from "../../store/actions";
-import EditPointComponent from "../edit-point-component/edit-point-component";
-import { getOffersByPoint } from "../../utils";
-import { Offer } from "../../types/offer";
+import { Point } from '../../types/point';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setActivePoint, setClickedEdit, setClickedAddNewButton } from '../../store/actions';
+import EditPointComponent from '../edit-point/edit-point';
+import { getOffersByPoint } from '../../utils';
+import { Offer } from '../../types/offer';
+import { putEditPointAction } from '../../store/api-actions';
 
-type RoutePointComponentProps = {
+type RoutePointProps = {
   point: Point;
   isActive?: boolean;
   pointOffers: Offer[];
 };
 
-function RoutePointComponent({ point, isActive, pointOffers }: RoutePointComponentProps) {
+function RoutePoint({ point, isActive, pointOffers }: RoutePointProps) {
   const { base_price, destination, type, offers, date_from, date_to, id, is_favorite } = point;
   const dateFormated = dayjs(date_from);
   const timeFromFormated = dayjs(date_from);
   const timeToFormated = dayjs(date_to);
-  const [ isClicked, setClicked ] = useState<boolean>(false);
-  const [ isFavorite, setFavorite ] = useState<boolean>(is_favorite!);
+  const [ isFavorite, setFavorite ] = useState<boolean>(is_favorite as boolean);
   const dispatch = useAppDispatch();
+  const isClicked = useAppSelector((state) => state.isClickedEdit);
 
-  useEffect(() => {
-    dispatch(setType(type));
-  }, [type, dispatch])
-
-  const offersFromServer = getOffersByPoint(pointOffers!, offers);
+  const offersFromServer = getOffersByPoint(pointOffers, offers);
 
   const handleOnClick = () => {
-    setClicked(!isClicked);
     dispatch(setClickedEdit(true));
     dispatch(setActivePoint(id as string));
-    dispatch(setClickedButton(false));
-    dispatch(setDeleted(false));
+    dispatch(setClickedAddNewButton(false));
   };
 
   const handleIsFavorite = () => {
     setFavorite(!isFavorite);
+    const postData: Point = {
+      base_price: base_price,
+      date_from: date_from,
+      date_to: date_from,
+      destination: destination,
+      is_favorite: !isFavorite,
+      offers: offers,
+      type: type,
+      id: id,
+    };
+    dispatch(putEditPointAction(postData));
   };
 
   return (
@@ -48,7 +54,7 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
         <li className="trip-events__item" id={id}>
           <div className="event">
             <time className="event__date" dateTime="2019-03-18">
-              {dateFormated.format("MMM DD")}
+              {dateFormated.format('MMM DD')}
             </time>
             <div className="event__type">
               <img
@@ -65,15 +71,15 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
             <div className="event__schedule">
               <p className="event__time">
                 <time className="event__start-time" dateTime="2019-03-18T10:30">
-                  {timeFromFormated.format("HH:mm")}
+                  {timeFromFormated.format('HH:mm')}
                 </time>
                 —
                 <time className="event__end-time" dateTime="2019-03-18T11:00">
-                  {timeToFormated.format("HH:mm")}
+                  {timeToFormated.format('HH:mm')}
                 </time>
               </p>
               <p className="event__duration">
-                {timeToFormated.diff(timeFromFormated, "hour")} H
+                {timeToFormated.diff(timeFromFormated, 'hour')} H
               </p>
             </div>
             <p className="event__price">
@@ -82,17 +88,19 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
             <h4 className="visually-hidden">Offers:</h4>
             <ul className="event__selected-offers">
               {offersFromServer()?.map((offer) => offer.map((el) =>
-               <li className="event__offer" key={el.id}>
-               <span className="event__offer-title">{el.title}</span>{" "}
+                (
+                  <li className="event__offer" key={el.id}>
+                    <span className="event__offer-title">{el.title}</span>{' '}
                +€&nbsp;
-               <span className="event__offer-price">{el.price}</span>
-             </li>
-                 )
+                    <span className="event__offer-price">{el.price}</span>
+                  </li>
+                )
+              )
               )}
             </ul>
             <button
               className={`event__favorite-btn ${
-                isFavorite ? "event__favorite-icon--active" : ""
+                isFavorite ? 'event__favorite-icon--active' : ''
               }`}
               type="button"
               onClick={handleIsFavorite}
@@ -122,4 +130,4 @@ function RoutePointComponent({ point, isActive, pointOffers }: RoutePointCompone
   );
 }
 
-export default  RoutePointComponent;
+export default RoutePoint;

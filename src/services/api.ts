@@ -13,6 +13,6 @@ export const createApi = (): AxiosInstance => {
       }
       return config;
     }
-  )
+  );
   return api;
-}
+};
