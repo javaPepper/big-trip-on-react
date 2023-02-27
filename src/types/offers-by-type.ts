@@ -1,6 +1,6 @@
-import { Offer } from "../types/offer";
+import { Offer } from '../types/offer';
 
 export type OffersByType = {
-  "type": string,
-  "offers": Offer[]
+  'type': string;
+  'offers': Offer[];
 }

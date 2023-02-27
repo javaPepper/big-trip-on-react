@@ -1,20 +1,20 @@
-import { useAppDispatch } from "../../hooks";
-import { setSortedPoints } from "../../store/actions";
+import { useAppDispatch } from '../../hooks';
+import { setSortingValue } from '../../store/actions';
 
 type SortComponentProps = {
   sortValue: string;
   isDisabled: boolean;
-  isDay: boolean;
+  isValue: boolean;
 };
 
-function SortComponent({ sortValue, isDisabled, isDay }: SortComponentProps) {
+function SortComponent({ sortValue, isDisabled, isValue }: SortComponentProps) {
   const dispatch = useAppDispatch();
 
   const handleSortingValues = (value: string) => {
-    if(value) {
-      dispatch(setSortedPoints(value))
+    if (value) {
+      dispatch(setSortingValue(value));
     }
-  }
+  };
 
   return (
     <div className={`trip-sort__item  trip-sort__item--${sortValue}`}>
@@ -25,9 +25,10 @@ function SortComponent({ sortValue, isDisabled, isDay }: SortComponentProps) {
         name="trip-sort"
         defaultValue={`sort-${sortValue}`}
         disabled={isDisabled}
-        defaultChecked={isDay}
+        defaultChecked={isValue}
         onChange={(evt) => {
-         handleSortingValues(evt.currentTarget.value)
+          const { value } = evt.currentTarget;
+          handleSortingValues(value);
         }}
       />
       <label className="trip-sort__btn" htmlFor={`sort-${sortValue}`}>

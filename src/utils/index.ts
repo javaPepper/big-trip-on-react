@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
-import { EmptyValues, FilterValues, SortingValues } from "../const";
-import { Destination } from "../types/destination";
-import { Offer } from "../types/offer";
-import { Point } from "../types/point";
+import dayjs from 'dayjs';
+import { EmptyValues, FilterValues, SortingValues } from '../const';
+import { Destination } from '../types/destination';
+import { Offer } from '../types/offer';
+import { Point } from '../types/point';
 
 export const setEmptyValue = (value: string) => {
   switch(true) {
@@ -30,7 +30,7 @@ export const getSortingValues = (points: Point[], currentValue: string) => {
       values = points.sort((a, b) => dayjs(b.date_to).diff(dayjs(b.date_from)) - dayjs(a.date_to).diff(dayjs(a.date_from)));
       return values;
     default:
-    return points;
+      return points;
   }
 };
 
@@ -46,19 +46,19 @@ export const getFilteringValues = (points: Point[], currentValue: string) => {
       values = points.filter((point) => new Date(point.date_from) < new Date());
       return values;
     default:
-    return points;
+      return points;
   }
 };
 
 export const getDestinationsNames = (destinations: Destination[]) => {
-  let destinationsNames: string[] = [];
+  const destinationsNames: string[] = [];
   return () => {
     destinations.map((el) => {
       const {name} = el;
       destinationsNames.push(name);
-    })
+    });
     return destinationsNames;
-  }
+  };
 };
 
 export const getOffersByPoint = (arr: Offer[], offers: number[]) => {
@@ -66,13 +66,13 @@ export const getOffersByPoint = (arr: Offer[], offers: number[]) => {
   return () => {
     if(arr) {
       const checkedOffers = arr?.filter((offer) => offers.find((el) => el === offer.id));
-      pointOffers.push(checkedOffers!);
+      pointOffers.push(checkedOffers);
     }
     return pointOffers;
-  }
+  };
 };
 
 export const getTotalPrice = (arr: Point[]) => {
-  let totalPrice: number = 0;
-    return arr.reduce((acc, currentValue) => acc + currentValue.base_price , totalPrice);
+  const totalPrice = 0;
+  return arr.reduce((acc, currentValue) => acc + currentValue.base_price , totalPrice);
 };

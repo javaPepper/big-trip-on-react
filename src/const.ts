@@ -12,12 +12,12 @@ export enum SortingValues {
   time = 'sort-time'
 }
 
-export const pointTypes = ["taxi", "bus", "train", "ship", "drive", "flight", "check-in", "sightseeing", "restaurant"];
+export const pointTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 export enum EmptyValues {
   everything = 'Click New Event to create your first point',
   past = 'There are no past events now',
-  future  = 'There are no future events now'
+  future = 'There are no future events now'
 }
 
 export enum FilterValues {
