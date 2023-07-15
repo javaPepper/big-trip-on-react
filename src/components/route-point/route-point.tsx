@@ -2,7 +2,7 @@ import { Point } from '../../types/point';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setActivePoint, setClickedEdit, setClickedAddNewButton } from '../../store/actions';
+import { setActivePoint, setClickedEdit, setClickedAddNewButton, setActiveOffers } from '../../store/actions';
 import EditPointComponent from '../edit-point/edit-point';
 import { getOffersByPoint } from '../../utils';
 import { Offer } from '../../types/offer';
@@ -23,12 +23,13 @@ function RoutePoint({ point, isActive, pointOffers }: RoutePointProps) {
   const dispatch = useAppDispatch();
   const isClicked = useAppSelector((state) => state.isClickedEdit);
 
-  const offersFromServer = getOffersByPoint(pointOffers, offers);
+  const offersFromServer = getOffersByPoint(pointOffers, offers as number[]);
 
   const handleOnClick = () => {
     dispatch(setClickedEdit(true));
     dispatch(setActivePoint(id as string));
     dispatch(setClickedAddNewButton(false));
+    dispatch(setActiveOffers(offers as number[]));
   };
 
   const handleIsFavorite = () => {
@@ -45,7 +46,8 @@ function RoutePoint({ point, isActive, pointOffers }: RoutePointProps) {
     };
     dispatch(putEditPointAction(postData));
   };
-
+  // console.log('isActive', isActive);
+  // console.log('isClicked', isClicked);
   return (
     <>
       {isActive && isClicked ? (

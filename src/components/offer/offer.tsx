@@ -23,14 +23,14 @@ function OfferComponent({ offer, isChecked, offers }: OfferComponentProps) {
         id={`event-offer-${id}`}
         type="checkbox"
         name="event-offer"
-        checked={isChecked || isActive}
+        checked={isChecked ? !isActive : isActive}
         value={id}
         onChange={(evt) => {
           const { value } = evt.currentTarget;
           setActive(!isActive);
-          (!isActive && !(offers?.includes(+value) ?? false)) ?
-            dispatch(setActiveOffers([...offers as number[], +value])) :
-            dispatch(setActiveOffers([...offers as number[]].filter((el) => el !== id)));
+          (offers?.includes(+value)) ?
+            dispatch(setActiveOffers([...offers].filter((el) => el !== id))) :
+            dispatch(setActiveOffers([...offers as number[], +value]));
         }}
       />
       <label

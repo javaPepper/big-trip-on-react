@@ -12,7 +12,7 @@ export const setPointsPrice = createAction('setPointsPrice',
 export const setDeleted = createAction('setDeleted',
   (isDeleted: boolean) => ({payload: isDeleted}));
 
-export const setClickedAddNewButton = createAction('setClickeButton',
+export const setClickedAddNewButton = createAction('setClickedAddNewButton',
   (isClicked: boolean) => ({payload: isClicked}));
 
 export const setClosed = createAction('setClosed',

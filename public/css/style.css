@@ -640,7 +640,8 @@ main {
       align-items: center;
   padding: 5px 2px;
   margin-right: 18px;
-  border-bottom: 1px solid #0d8ae4; }
+  border-bottom: 1px solid #0d8ae4;
+}
   .event__field-group--destination {
     width: 290px; }
 

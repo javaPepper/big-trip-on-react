@@ -5,7 +5,7 @@ import { pointTypes } from '../../const';
 import { Point } from '../../types/point';
 import EventTypeComponent from '../event-type/event-type';
 import OfferComponent from '../offer/offer';
-import RoutePointComponent from '../route-point/route-point';
+import RoutePoint from '../route-point/route-point';
 import DestinationComponent from '../destination/destination';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getDestinationsNames, getTotalPrice } from '../../utils';
@@ -30,8 +30,8 @@ function EditPointComponent({ point }: EditPointComponentProps) {
     date_to,
     destination,
     id,
-    offers,
     type,
+    offers,
     is_favorite,
   } = point;
 
@@ -41,7 +41,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const [priceValue, setPrice] = useState<number>(base_price);
   const [typeValue, setType] = useState<string>(type);
   const [isClickedType, setClickedType] = useState<boolean>(false);
-  const checkedOffers = useAppSelector((state) => state.activeOffers);
+  const activeOffers = useAppSelector((state) => state.activeOffers);
 
   const points = useAppSelector((state) => state.points);
   const pointOffers = useAppSelector((state) => state.offers);
@@ -57,7 +57,6 @@ function EditPointComponent({ point }: EditPointComponentProps) {
   const handleOnReset = () => {
     dispatch(deletePointAction(id as string));
     dispatch(fetchPointsAction());
-    dispatch(fetchOffersAction());
     dispatch(setPointsPrice(getTotalPrice(points)));
   };
 
@@ -69,7 +68,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
       date_to: endDate.toJSON(),
       destination: destinationFromServer,
       is_favorite: is_favorite,
-      offers: checkedOffers,
+      offers: activeOffers,
       type: typeValue,
       id: id,
     };
@@ -78,6 +77,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
 
   useEffect(() => {
     dispatch(fetchDestinationsAction());
+    dispatch(fetchOffersAction());
   }, [dispatch, destinationValue]);
 
   const destinations = useAppSelector((state) => state.destinations);
@@ -237,7 +237,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                     Offers
                   </h3>
                   <div className="event__available-offers">
-                    {isClickedType
+                    {typeValue !== point.type
                       ? offersByClick?.map((offer) => (
                         <OfferComponent
                           offer={offer}
@@ -250,7 +250,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
                         <OfferComponent
                           offer={offer}
                           key={offer.id}
-                          isChecked={offers.includes(offer.id)}
+                          isChecked={(offers?.includes(offer.id))}
                           offers={offers}
                         />
                       ))}
@@ -272,7 +272,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
         </li>
       ) :
         (
-          <RoutePointComponent point={point} pointOffers={offersByClick as Offer[]} />
+          <RoutePoint point={point} pointOffers={offersByClick as Offer[]} />
         )}
     </>
   );

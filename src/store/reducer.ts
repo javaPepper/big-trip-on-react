@@ -34,7 +34,7 @@ const initialState: initialStateType = {
   isClickedAddNewButton: false,
   activeId: '',
   isClickedEdit: false,
-  type: 'flight',
+  type: '',
   filterValue: '',
   sortValue: '',
   isClickedFilter: false,

@@ -8,12 +8,12 @@ type DestinationComponentProps = {
 };
 
 function DestinationComponent({ destination }: DestinationComponentProps) {
-  const { description, pictures } = destination;
+  const { description, pictures } = destination || {};
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
 
   return (
     <>
-      {pictures.length > 0 && isDataLoading ?
+      {description && pictures.length > 0 && isDataLoading ?
         <><p className="event__destination-description">{description}</p>
           <div className="event__photos-container">
             <div className="event__photos-tape">

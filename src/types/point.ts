@@ -7,6 +7,6 @@ export type Point = {
   destination: Destination;
   id?: string;
   is_favorite?: boolean;
-  offers: number[];
+  offers?: number[];
   type: string;
 }
