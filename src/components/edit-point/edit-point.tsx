@@ -1,4 +1,5 @@
 import { useState, useEffect, FormEvent } from 'react';
+import { cloneDeep } from 'lodash';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { pointTypes } from '../../const';
@@ -24,6 +25,7 @@ type EditPointComponentProps = {
 };
 
 function EditPointComponent({ point }: EditPointComponentProps) {
+  const clonedPoint = cloneDeep(point);
   const {
     base_price,
     date_from,
@@ -33,7 +35,7 @@ function EditPointComponent({ point }: EditPointComponentProps) {
     type,
     offers,
     is_favorite,
-  } = point;
+  } = clonedPoint;
 
   const [startDate, setStartDate] = useState<Date>(new Date(date_from));
   const [endDate, setEndDate] = useState<Date>(new Date(date_to));
