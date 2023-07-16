@@ -24,8 +24,8 @@ function AddNewPointComponent() {
   const [ startDate, setStartDate ] = useState<Date>(new Date());
   const [ endDate, setEndDate ] = useState<Date>(startDate);
   const [ priceValue, setPrice ] = useState<number>(0);
-  const [ destinationValue, setDestination ] = useState<string>('Geneva');
-  const [ typeValue, setType ] = useState<string>('flight');
+  const [ destinationValue, setDestination ] = useState<string>('');
+  const [ typeValue, setType ] = useState<string>('');
   const dispatch = useAppDispatch();
   const activeOffers = useAppSelector((state) => state.activeOffers);
   const isClosed = useAppSelector((state) => state.isClosed);

@@ -46,8 +46,7 @@ function RoutePoint({ point, isActive, pointOffers }: RoutePointProps) {
     };
     dispatch(putEditPointAction(postData));
   };
-  // console.log('isActive', isActive);
-  // console.log('isClicked', isClicked);
+
   return (
     <>
       {isActive && isClicked ? (

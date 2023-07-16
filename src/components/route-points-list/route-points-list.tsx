@@ -1,4 +1,5 @@
 import RoutePointComponent from '../route-point/route-point';
+import { cloneDeep } from 'lodash';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getFilteringValues, getSortingValues, getTotalPrice } from '../../utils';
 import { useEffect, useMemo } from 'react';
@@ -10,7 +11,7 @@ import { Offer } from '../../types/offer';
 function RoutePointsList() {
   const id = useAppSelector((state) => state.activeId);
   const points = useAppSelector((state) => state.points);
-  let sortedPoints = [...points]
+  let sortedPoints = cloneDeep(points)
     .sort((a, b) => new Date(b.date_from).getTime() - new Date(a.date_from).getTime());
   const sortValue = useAppSelector((state) => state.sortValue);
   sortedPoints = useMemo(() => getSortingValues([...sortedPoints], sortValue), [sortValue, sortedPoints]);
